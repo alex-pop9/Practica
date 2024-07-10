@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|c:\\users\\alexandrupop\\source\\repos\\proiectpractica\\proiectpractica\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|solutionrelative:proiectpractica\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|c:\\users\\alexandrupop\\source\\repos\\proiectpractica\\proiectpractica\\configform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|solutionrelative:proiectpractica\\configform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|c:\\users\\alexandrupop\\source\\repos\\proiectpractica\\proiectpractica\\configform.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\proiectpractica\\configform.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
       "RelativeMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|solutionrelative:proiectpractica\\configform.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|c:\\users\\alexandrupop\\source\\repos\\proiectpractica\\proiectpractica\\configform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\proiectpractica\\configform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|solutionrelative:proiectpractica\\configform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|c:\\users\\alexandrupop\\source\\repos\\proiectpractica\\proiectpractica\\configform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|solutionrelative:proiectpractica\\configform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|c:\\users\\alexandrupop\\source\\repos\\proiectpractica\\proiectpractica\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79407A48-A5F5-4083-92AB-2973E7854399}|ProiectPractica\\ProiectPractica.csproj|solutionrelative:proiectpractica\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,31 +34,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ConfigForm.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.cs",
-              "RelativeDocumentMoniker": "ProiectPractica\\ConfigForm.cs",
-              "ToolTip": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.cs [Design]",
-              "RelativeToolTip": "ProiectPractica\\ConfigForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-10T10:50:22.907Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ConfigForm.resx",
-              "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.resx",
-              "RelativeDocumentMoniker": "ProiectPractica\\ConfigForm.resx",
-              "ToolTip": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.resx",
-              "RelativeToolTip": "ProiectPractica\\ConfigForm.resx",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2024-07-10T10:50:05.21Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "ConfigForm.Designer.cs",
               "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.Designer.cs",
               "RelativeDocumentMoniker": "ProiectPractica\\ConfigForm.Designer.cs",
@@ -71,7 +47,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ConfigForm.cs",
               "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.cs",
               "RelativeDocumentMoniker": "ProiectPractica\\ConfigForm.cs",
@@ -79,21 +55,42 @@
               "RelativeToolTip": "ProiectPractica\\ConfigForm.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-10T09:59:39.455Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-10T09:59:39.455Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\Program.cs",
               "RelativeDocumentMoniker": "ProiectPractica\\Program.cs",
               "ToolTip": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\Program.cs",
               "RelativeToolTip": "ProiectPractica\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAaAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-10T09:59:33.767Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ConfigForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.cs",
+              "RelativeDocumentMoniker": "ProiectPractica\\ConfigForm.cs",
+              "ToolTip": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.cs [Design]",
+              "RelativeToolTip": "ProiectPractica\\ConfigForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-10T10:50:22.907Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ConfigForm.resx",
+              "DocumentMoniker": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.resx",
+              "RelativeDocumentMoniker": "ProiectPractica\\ConfigForm.resx",
+              "ToolTip": "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\ProiectPractica\\ConfigForm.resx",
+              "RelativeToolTip": "ProiectPractica\\ConfigForm.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2024-07-10T10:50:05.21Z"
             },
             {
               "$type": "Bookmark",
