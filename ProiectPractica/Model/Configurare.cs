@@ -17,7 +17,5 @@ namespace ProiectPractica.Model
         public int ShortTripDistanceThreshold { get; set; }
         public int StartBusinessHour { get; set; }
         public int EndBusinessHour { get; set; }
-
-
     }
 }
