@@ -1,3 +1,6 @@
+using ProiectPractica.Model;
+using System;
+
 namespace ProiectPractica
 {
     internal static class Program
