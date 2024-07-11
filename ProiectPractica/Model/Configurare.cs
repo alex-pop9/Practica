@@ -10,7 +10,7 @@ namespace ProiectPractica.Model
     {
         public int MinAcceptablePrice { get; set; }
         public float MinPricePerKm { get; set; }
-        public int NumberOFCars { get; set; }
+        public int NumberOfCars { get; set; }
         public int ReservationCheckInterval { get; set; }
         public string PhoneNumber { get; set; }
         public int MinPriceForShortTrips { get; set; }
