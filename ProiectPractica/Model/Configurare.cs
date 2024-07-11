@@ -14,26 +14,10 @@ namespace ProiectPractica.Model
         public int ReservationCheckInterval { get; set; }
         public string PhoneNumber { get; set; }
         public int MinPriceForShortTrips { get; set; }
+        public int ShortTripDistanceThreshold { get; set; }
         public int StartBusinessHour { get; set; }
         public int EndBusinessHour { get; set; }
 
-       
-
-        public Configurare(int minAccPrice, float minPricePerKm, int numberOfCars, 
-            int reservationCheck, string phoneNumber, int minPriceShortTrip, 
-            int shortTripDistance, int startBusinessHour, int endBusinessHour)
-        {
-            MinAcceptablePrice = minAccPrice;
-            MinPricePerKm = minPricePerKm;
-            NumberOFCars = numberOfCars;
-            ReservationCheckInterval = reservationCheck;
-            PhoneNumber = phoneNumber;
-            MinPriceForShortTrips = minPriceShortTrip;
-            StartBusinessHour = startBusinessHour;
-            EndBusinessHour = endBusinessHour;
-        }
-
-        public Configurare() { }
 
     }
 }
