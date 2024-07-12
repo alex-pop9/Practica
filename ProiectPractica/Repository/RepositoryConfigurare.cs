@@ -11,23 +11,7 @@ using Newtonsoft.Json.Linq;
 namespace ProiectPractica.Repository
 {
     internal class RepositoryConfigurare : IRepositoryConfigurare
-    {
-        /// <summary>
-        /// This function reads from a file and returns the string read from the file, if the file exists.
-        /// And if the file does not exists the function throws an exception.
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns>The string from file</returns>
-        /// <exception cref="Exception"></exception>
-        private string ReadFromFile(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException("File not found!");
-            }
-            return File.ReadAllText(filePath);
-        }
-
+    {  
         /// <summary>
         /// This function deserializes a JSON string if the string is valid and returns the configuration.
         /// If the string fails the validation or the file does not exist it returns a null object
@@ -43,6 +27,22 @@ namespace ProiectPractica.Repository
                  return configurare;
             }
             return null;
+        }
+
+        /// <summary>
+        /// This function reads from a file and returns the string read from the file, if the file exists.
+        /// And if the file does not exists the function throws an exception.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>The string from file</returns>
+        /// <exception cref="Exception"></exception>
+        private string ReadFromFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("File not found!");
+            }
+            return File.ReadAllText(filePath);
         }
 
         /// <summary>
