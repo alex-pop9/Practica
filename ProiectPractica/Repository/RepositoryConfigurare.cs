@@ -10,14 +10,14 @@ using Newtonsoft.Json.Linq;
 
 namespace ProiectPractica.Repository
 {
-    internal class RepositoryConfigurare : IRepository
+    internal class RepositoryConfigurare : IRepositoryConfigurare
     {
         /// <summary>
-        ///  This function reads from a file and returns the string read from the file, if the file exists.
-        ///  And if the file does not exists the function throws an exception.
+        /// This function reads from a file and returns the string read from the file, if the file exists.
+        /// And if the file does not exists the function throws an exception.
         /// </summary>
         /// <param name="filePath"></param>
-        /// <returns></returns>
+        /// <returns>The string from file</returns>
         /// <exception cref="Exception"></exception>
         private string ReadFromFile(string filePath)
         {
@@ -38,8 +38,9 @@ namespace ProiectPractica.Repository
         {
             try
             {
+
                 var stringFromFile = ReadFromFile(filePath);
-                if (ValidateString(stringFromFile))
+                if (ValidateFileContent(stringFromFile))
                 {
                      var configurare = JsonConvert.DeserializeObject<Configurare>(stringFromFile);
                      return configurare;
@@ -63,12 +64,12 @@ namespace ProiectPractica.Repository
         /// <param name="stringToBeValidated"></param>
         /// <returns>True, if the string given is correct</returns>
         /// <exception cref="Exception"></exception>
-        private bool ValidateString(string stringToBeValidated)
+        private bool ValidateFileContent(string stringToBeValidated)
         {
-            JsonSchemaGenerator generator = new JsonSchemaGenerator();
-            JsonSchema schema = generator.Generate(typeof(Configurare));
+            var generator = new JsonSchemaGenerator();
+            var schema = generator.Generate(typeof(Configurare));
 
-            JObject conf = JObject.Parse(stringToBeValidated);
+            var conf = JObject.Parse(stringToBeValidated);
 
             IList<String> messages;
             if(!conf.IsValid(schema,out messages))
