@@ -23,35 +23,26 @@ namespace ProiectPractica.Repository
         {
             if (!File.Exists(filePath))
             {
-                throw new Exception("File not found!");
+                throw new FileNotFoundException("File not found!");
             }
             return File.ReadAllText(filePath);
         }
 
         /// <summary>
         /// This function deserializes a JSON string if the string is valid and returns the configuration.
-        /// If the string fails the validation or the file does not exist it returns an empty object
+        /// If the string fails the validation or the file does not exist it returns a null object
         /// </summary>
         /// <param name="filePath"></param>
-        /// <returns>The configuration from the file if it is valid or an empty Configurare object otherwise</returns>
-        public Configurare GetConfigurareFromString(string filePath)
+        /// <returns>The configuration from the file if it is valid or a null Configurare object otherwise</returns>
+        public Configurare? GetConfigurareFromString(string filePath)
         {
-            try
+            var stringFromFile = ReadFromFile(filePath);
+            if (ValidateFileContent(stringFromFile))
             {
-
-                var stringFromFile = ReadFromFile(filePath);
-                if (ValidateFileContent(stringFromFile))
-                {
-                     var configurare = JsonConvert.DeserializeObject<Configurare>(stringFromFile);
-                     return configurare;
-                }
-                return new Configurare();
+                 var configurare = JsonConvert.DeserializeObject<Configurare>(stringFromFile);
+                 return configurare;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);// sa adaug un logger in cazul in care am erori de genul?
-                return new Configurare();
-            }
+            return null;
         }
 
         /// <summary>

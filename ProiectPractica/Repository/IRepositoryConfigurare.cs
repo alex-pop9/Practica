@@ -4,6 +4,6 @@ namespace ProiectPractica.Repository
 {
     internal interface IRepositoryConfigurare
     {
-        public Configurare GetConfigurareFromString(string filePath);
+        public Configurare? GetConfigurareFromString(string filePath);
     }
 }
