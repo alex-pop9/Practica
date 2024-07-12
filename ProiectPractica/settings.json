@@ -1,0 +1,11 @@
+﻿{
+  "MinAcceptablePrice": 60,
+  "MinPricePerKm": 1.7,
+  "NumberOfCars": 2,
+  "ReservationCheckInterval": 2,
+  "PhoneNumber": "+40747633357",
+  "MinPriceForShortTrips": 50,
+  "ShortTripDistanceThreshold": 15,
+  "StartBusinessHour": 9,
+  "EndBusinessHour": 19
+}
