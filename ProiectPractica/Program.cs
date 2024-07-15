@@ -1,5 +1,6 @@
 using ProiectPractica.Model;
 using System;
+using ProiectPractica.Repository;
 
 namespace ProiectPractica
 {
