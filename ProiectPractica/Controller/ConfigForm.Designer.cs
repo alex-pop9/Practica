@@ -211,6 +211,7 @@
             buttonSave.TabIndex = 18;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += buttonSave_Click;
             // 
             // buttonReset
             // 
