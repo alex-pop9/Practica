@@ -5,7 +5,7 @@ namespace ProiectPractica
 {
     public partial class ConfigForm : Form
     {
-        private RepositoryConfigurare? repository;
+        private RepositoryConfigurare? _repository;
         public ConfigForm()
         {
             InitializeComponent();
@@ -20,8 +20,8 @@ namespace ProiectPractica
         {
             try
             {
-                this.repository = repositoryConfigurare;
-                var configurareFromRepo = repository.GetConfigurareFromFile();
+                _repository = repositoryConfigurare;
+                var configurareFromRepo = _repository.GetConfigurareFromFile();
                 if (configurareFromRepo != null)
                 {
                     SetValuesInTextBoxes(configurareFromRepo);
@@ -98,7 +98,7 @@ namespace ProiectPractica
             {
                 var configurare = GetConfigurareFromTextBox();
                 ValidateConfigurare(configurare);
-                if (repository.SaveConfigurare(configurare) != null)
+                if (_repository.SaveConfigurare(configurare) != null)
                 {
                     MessageBox.Show("Changes saved successfully!");
                 }
@@ -162,7 +162,7 @@ namespace ProiectPractica
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
-            var configurare = repository.GetConfigurareFromFile();
+            var configurare = _repository.GetConfigurareFromFile();
             if (configurare != null)
             {
                 SetValuesInTextBoxes(configurare);

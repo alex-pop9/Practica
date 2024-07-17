@@ -1,21 +1,14 @@
 ﻿using ProiectPractica.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Linq;
 
 namespace ProiectPractica.Repository
 {
     public class RepositoryConfigurare : IRepositoryConfigurare
     {
-        private string filePath;
+        private readonly string s_filePath;
         public RepositoryConfigurare(string filePath) 
         { 
-            this.filePath = filePath;
+            s_filePath = filePath;
         }
 
         /// <summary>
@@ -45,7 +38,7 @@ namespace ProiectPractica.Repository
         /// <returns></returns>
         public Configurare? SaveConfigurare(Configurare configurare)
         {
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(configurare, Formatting.Indented));
+            File.WriteAllText(s_filePath, JsonConvert.SerializeObject(configurare, Formatting.Indented));
             return configurare;
         }
 
@@ -58,11 +51,11 @@ namespace ProiectPractica.Repository
         /// <exception cref="Exception"></exception>
         private string ReadFromFile()
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(s_filePath))
             {
                 throw new FileNotFoundException("File not found!");
             }
-            return File.ReadAllText(filePath);
+            return File.ReadAllText(s_filePath);
         }
     }
 }
