@@ -215,12 +215,13 @@
             // 
             // buttonReset
             // 
-            buttonReset.Location = new Point(1266, 612);
+            buttonReset.Location = new Point(1265, 612);
             buttonReset.Name = "buttonReset";
             buttonReset.Size = new Size(218, 110);
             buttonReset.TabIndex = 19;
             buttonReset.Text = "Reset";
             buttonReset.UseVisualStyleBackColor = true;
+            buttonReset.Click += buttonReset_Click;
             // 
             // ConfigForm
             // 

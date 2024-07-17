@@ -29,7 +29,6 @@ namespace ProiectPractica.Repository
             var stringFromFile = ReadFromFile();
             try
             {
-                
                 var configurare = JsonConvert.DeserializeObject<Configurare>(stringFromFile);
                 return configurare;
             }

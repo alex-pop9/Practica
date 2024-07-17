@@ -104,7 +104,7 @@ namespace ProiectPractica
                 }
                 MakeButtonsUnavailable();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -126,7 +126,7 @@ namespace ProiectPractica
             configurare.ShortTripDistanceThreshold = int.Parse(textShortTripDistanceThreshold.Text);
             configurare.StartBusinessHour = int.Parse(textStartBusinessHour.Text);
             configurare.EndBusinessHour = int.Parse(textEndBusinessHour.Text);
-            return configurare;             
+            return configurare;
         }
 
         /// <summary>
@@ -154,10 +154,20 @@ namespace ProiectPractica
                 messages += "End hour should be greater than Start hour!\n";
             }
 
-            if(messages != "")
+            if (messages != "")
             {
                 throw new Exception(messages);
             }
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            var configurare = repository.GetConfigurareFromFile();
+            if (configurare != null)
+            {
+                SetValuesInTextBoxes(configurare);
+            }
+            MakeButtonsUnavailable();
         }
     }
 }
