@@ -2,10 +2,10 @@
   "MinAcceptablePrice": 1,
   "MinPricePerKm": 2.0,
   "NumberOfCars": 3,
-  "ReservationCheckInterval": 4,
-  "PhoneNumber": "+12345",
-  "MinPriceForShortTrips": 6,
-  "ShortTripDistanceThreshold": 7,
-  "StartBusinessHour": 8,
-  "EndBusinessHour": 9
+  "ReservationCheckInterval": 0,
+  "PhoneNumber": null,
+  "MinPriceForShortTrips": 0,
+  "ShortTripDistanceThreshold": 0,
+  "StartBusinessHour": 0,
+  "EndBusinessHour": 0
 }

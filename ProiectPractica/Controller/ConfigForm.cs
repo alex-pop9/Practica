@@ -160,6 +160,11 @@ namespace ProiectPractica
             }
         }
 
+        /// <summary>
+        /// Resets the values from the text boxes to the initial configuration values from the file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonReset_Click(object sender, EventArgs e)
         {
             var configurare = _repository.GetConfigurareFromFile();
