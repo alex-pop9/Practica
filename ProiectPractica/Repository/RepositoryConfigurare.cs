@@ -5,10 +5,10 @@ namespace ProiectPractica.Repository
 {
     public class RepositoryConfigurare : IRepositoryConfigurare
     {
-        private readonly string s_filePath;
+        private readonly string _filePath;
         public RepositoryConfigurare(string filePath) 
         { 
-            s_filePath = filePath;
+            _filePath = filePath;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ProiectPractica.Repository
         /// <returns></returns>
         public Configurare? SaveConfigurare(Configurare configurare)
         {
-            File.WriteAllText(s_filePath, JsonConvert.SerializeObject(configurare, Formatting.Indented));
+            File.WriteAllText(_filePath, JsonConvert.SerializeObject(configurare, Formatting.Indented));
             return configurare;
         }
 
@@ -51,11 +51,7 @@ namespace ProiectPractica.Repository
         /// <exception cref="Exception"></exception>
         private string ReadFromFile()
         {
-            if (!File.Exists(s_filePath))
-            {
-                throw new FileNotFoundException("File not found!");
-            }
-            return File.ReadAllText(s_filePath);
+            return File.ReadAllText(_filePath);
         }
     }
 }

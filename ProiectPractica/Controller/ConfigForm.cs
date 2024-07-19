@@ -5,7 +5,7 @@ namespace ProiectPractica
 {
     public partial class ConfigForm : Form
     {
-        private RepositoryConfigurare? _repository;
+        private RepositoryConfigurare _repository;
         public ConfigForm()
         {
             InitializeComponent();
@@ -136,27 +136,27 @@ namespace ProiectPractica
         /// <exception cref="Exception"></exception>
         private void ValidateConfigurare(Configurare configurare)
         {
-            var messages = "";
+            var messages = new List<string>();
             if (!configurare.PhoneNumber[0].Equals('+'))
             {
-                messages += "A phone number should start with '+'!\n";
+                messages.Add("A phone number should start with '+'!\n");
             }
             if (configurare.StartBusinessHour < 0 || configurare.StartBusinessHour > 24)
             {
-                messages += "Invalid Start hour!\n";
+                messages.Add("Invalid Start hour!\n");
             }
             if (configurare.EndBusinessHour < 0 || configurare.EndBusinessHour > 24)
             {
-                messages += "Invalid End hour!\n";
+                messages.Add("Invalid End hour!\n");
             }
             if (configurare.StartBusinessHour >= configurare.EndBusinessHour)
             {
-                messages += "End hour should be greater than Start hour!\n";
+                messages.Add("End hour should be greater than Start hour!\n");
             }
 
-            if (messages != "")
+            if (messages.Any())
             {
-                throw new Exception(messages);
+                throw new Exception(string.Join('\n', messages));
             }
         }
 

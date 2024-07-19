@@ -1,5 +1,8 @@
 using ProiectPractica.Repository;
 using ProiectPractica.Model;
+using System.IO;
+using System.Reflection;
+using Mono.Cecil;
 
 namespace TestProject1
 {
@@ -9,7 +12,9 @@ namespace TestProject1
         [TestMethod]
         public void GetConfigurareFromFile_ValidFilePath_ReturnConfigurare()
         {
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\\test.json";
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            string stubPath = Path.Combine(assemblyDirectory, "configurareOK.json");
             var repository = new RepositoryConfigurare(stubPath);
 
             var configurare = repository.GetConfigurareFromFile();
@@ -20,7 +25,7 @@ namespace TestProject1
         [TestMethod]
         public void GetConfigurareFromFile_InvalidJson_ReturnNullConfigurare()
         {
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\\test2.json";
+            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\\configurareInvalida.json";
             var repository = new RepositoryConfigurare(stubPath);
 
             var configurare = repository.GetConfigurareFromFile();
@@ -31,7 +36,9 @@ namespace TestProject1
         [TestMethod]
         public void GetConfigurareFromFile_InvalidFilePath_ThrowException()
         {
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\tests.json";
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            string stubPath = Path.Combine(assemblyDirectory, "configurare.json");
             var repository = new RepositoryConfigurare(stubPath);
 
             Assert.ThrowsException<FileNotFoundException>(() => repository.GetConfigurareFromFile());
@@ -40,7 +47,9 @@ namespace TestProject1
         [TestMethod]
         public void SaveConfigurare_ValidConfiguration_SaveAndReturnConfiguratie()
         {
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\\test3.json";
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            string stubPath = Path.Combine(assemblyDirectory, "configurareSave.json");
             var repository = new RepositoryConfigurare(stubPath);
             var configuration = new Configurare
             {
@@ -84,7 +93,9 @@ namespace TestProject1
         [TestMethod]
         public void SaveConfigurare_IncompleteConfiguration_SaveAndReturnConfiguratie()
         {
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\\test3.json";
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            string stubPath = Path.Combine(assemblyDirectory, "configurareIncompleta.json");
             var repository = new RepositoryConfigurare(stubPath);
             var configuration = new Configurare
             {

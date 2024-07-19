@@ -4,7 +4,7 @@
   "NumberOfCars": 2,
   "ReservationCheckInterval": null,
   "PhoneNumber": "+40747633357",
-  "MinPriceForShortTri: ,
+  "MinPriceForShortTri:": ,
   "ShortTripDistanceThreshold": 15,
   "StartBusinessHour": 9,
   "EndBusinessHour": 19
