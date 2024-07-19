@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 
 namespace ProiectPractica.Repository
 {
-    public class RepositoryConfigurare : IRepositoryConfigurare
+    public class ConfigurationRepository : IConfigurationRepository
     {
         private readonly string _filePath;
-        public RepositoryConfigurare(string filePath) 
+        public ConfigurationRepository(string filePath) 
         { 
             _filePath = filePath;
         }
@@ -17,13 +17,13 @@ namespace ProiectPractica.Repository
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>The configuration from the file, if it can be deserialized or null otherwise</returns>
-        public Configurare? GetConfigurareFromFile()
+        public Configuration? GetConfigurationFromFile()
         {
             var stringFromFile = ReadFromFile();
             try
             {
-                var configurare = JsonConvert.DeserializeObject<Configurare>(stringFromFile);
-                return configurare;
+                var configuration = JsonConvert.DeserializeObject<Configuration>(stringFromFile);
+                return configuration;
             }
             catch 
             {
@@ -32,14 +32,14 @@ namespace ProiectPractica.Repository
         }
 
         /// <summary>
-        /// Save the given configurare into the file.
+        /// Save the given configuration into the file.
         /// </summary>
-        /// <param name="configurare"></param>
+        /// <param name="configuration"></param>
         /// <returns></returns>
-        public Configurare? SaveConfigurare(Configurare configurare)
+        public Configuration? SaveConfiguration(Configuration configuration)
         {
-            File.WriteAllText(_filePath, JsonConvert.SerializeObject(configurare, Formatting.Indented));
-            return configurare;
+            File.WriteAllText(_filePath, JsonConvert.SerializeObject(configuration, Formatting.Indented));
+            return configuration;
         }
 
         /// <summary>

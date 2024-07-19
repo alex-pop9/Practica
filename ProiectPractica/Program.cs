@@ -16,10 +16,10 @@ namespace ProiectPractica
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             var filePath = ConfigurationManager.AppSettings["filePath"];
-            var repositoryConfigurare = new RepositoryConfigurare(filePath);
+            var configurationRepository = new ConfigurationRepository(filePath);
             ApplicationConfiguration.Initialize();
             var config = new ConfigForm();
-            config.SetRepository(repositoryConfigurare);
+            config.SetRepository(configurationRepository);
             Application.Run(config);
         }
     }

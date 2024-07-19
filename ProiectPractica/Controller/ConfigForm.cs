@@ -5,30 +5,30 @@ namespace ProiectPractica
 {
     public partial class ConfigForm : Form
     {
-        private RepositoryConfigurare _repository;
+        private ConfigurationRepository _repository;
         public ConfigForm()
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// This function sets the repository, takes the configurare from the file, and puts the object values into text boxes.
+        /// This function sets the repository, takes the configuration from the file, and puts the object values into text boxes.
         /// If there is an error it shows a Message box and unables all text boxes.
         /// </summary>
-        /// <param name="repositoryConfigurare">Injected repository</param>
-        public void SetRepository(RepositoryConfigurare repositoryConfigurare)
+        /// <param name="configurationRepository">Injected repository</param>
+        public void SetRepository(ConfigurationRepository configurationRepository)
         {
             try
             {
-                _repository = repositoryConfigurare;
-                var configurareFromRepo = _repository.GetConfigurareFromFile();
-                if (configurareFromRepo != null)
+                _repository = configurationRepository;
+                var configurationFromRepo = _repository.GetConfigurationFromFile();
+                if (configurationFromRepo != null)
                 {
-                    SetValuesInTextBoxes(configurareFromRepo);
+                    SetValuesInTextBoxes(configurationFromRepo);
                 }
                 else
                 {
-                    throw new Exception("Configuration is null");
+                    throw new Exception("Error loading the Configuration from the file!");
                 }
                 MakeButtonsUnavailable();
             }
@@ -40,20 +40,20 @@ namespace ProiectPractica
         }
 
         /// <summary>
-        /// Puts the values from configurare object into the text boxes.
+        /// Puts the values from configuration object into the text boxes.
         /// </summary>
-        /// <param name="configurare"></param>
-        private void SetValuesInTextBoxes(Configurare configurare)
+        /// <param name="configuration"></param>
+        private void SetValuesInTextBoxes(Configuration configuration)
         {
-            textMinAcceptablePrice.Text = configurare.MinAcceptablePrice.ToString();
-            textMinPricePerKm.Text = configurare.MinPricePerKm.ToString();
-            textNumberOfCars.Text = configurare.NumberOfCars.ToString();
-            textReservationCheckInterval.Text = configurare.ReservationCheckInterval.ToString();
-            textPhoneNumber.Text = configurare.PhoneNumber;
-            textMinPriceForShortTrips.Text = configurare.MinPriceForShortTrips.ToString();
-            textShortTripDistanceThreshold.Text = configurare.ShortTripDistanceThreshold.ToString();
-            textStartBusinessHour.Text = configurare.StartBusinessHour.ToString();
-            textEndBusinessHour.Text = configurare.EndBusinessHour.ToString();
+            textMinAcceptablePrice.Text = configuration.MinAcceptablePrice.ToString();
+            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString();
+            textNumberOfCars.Text = configuration.NumberOfCars.ToString();
+            textReservationCheckInterval.Text = configuration.ReservationCheckInterval.ToString();
+            textPhoneNumber.Text = configuration.PhoneNumber;
+            textMinPriceForShortTrips.Text = configuration.MinPriceForShortTrips.ToString();
+            textShortTripDistanceThreshold.Text = configuration.ShortTripDistanceThreshold.ToString();
+            textStartBusinessHour.Text = configuration.StartBusinessHour.ToString();
+            textEndBusinessHour.Text = configuration.EndBusinessHour.ToString();
         }
 
         private void MakeButtonsUnavailable()
@@ -88,7 +88,7 @@ namespace ProiectPractica
         }
 
         /// <summary>
-        /// It gets the configurare from text boxes, validates it and saves the configurare in the file.
+        /// It gets the configuration from text boxes, validates it and saves the configuration in the file.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -96,9 +96,9 @@ namespace ProiectPractica
         {
             try
             {
-                var configurare = GetConfigurareFromTextBox();
-                ValidateConfigurare(configurare);
-                if (_repository.SaveConfigurare(configurare) != null)
+                var configuration = GetConfigurationFromTextBox();
+                ValidateConfiguration(configuration);
+                if (_repository.SaveConfiguration(configuration) != null)
                 {
                     MessageBox.Show("Changes saved successfully!");
                 }
@@ -111,45 +111,45 @@ namespace ProiectPractica
         }
 
         /// <summary>
-        /// Reads the text boxes and tries to parse the text into the configurare attributes types.
+        /// Reads the text boxes and tries to parse the text into the configuration attributes types.
         /// </summary>
         /// <returns></returns>
-        private Configurare GetConfigurareFromTextBox()
+        private Configuration GetConfigurationFromTextBox()
         {
-            var configurare = new Configurare();
-            configurare.MinAcceptablePrice = int.Parse(textMinAcceptablePrice.Text);
-            configurare.MinPricePerKm = float.Parse(textMinPricePerKm.Text);
-            configurare.NumberOfCars = int.Parse(textNumberOfCars.Text);
-            configurare.ReservationCheckInterval = int.Parse(textReservationCheckInterval.Text);
-            configurare.PhoneNumber = textPhoneNumber.Text;
-            configurare.MinPriceForShortTrips = int.Parse(textMinPriceForShortTrips.Text);
-            configurare.ShortTripDistanceThreshold = int.Parse(textShortTripDistanceThreshold.Text);
-            configurare.StartBusinessHour = int.Parse(textStartBusinessHour.Text);
-            configurare.EndBusinessHour = int.Parse(textEndBusinessHour.Text);
-            return configurare;
+            var configuration = new Configuration();
+            configuration.MinAcceptablePrice = int.Parse(textMinAcceptablePrice.Text);
+            configuration.MinPricePerKm = float.Parse(textMinPricePerKm.Text);
+            configuration.NumberOfCars = int.Parse(textNumberOfCars.Text);
+            configuration.ReservationCheckInterval = int.Parse(textReservationCheckInterval.Text);
+            configuration.PhoneNumber = textPhoneNumber.Text;
+            configuration.MinPriceForShortTrips = int.Parse(textMinPriceForShortTrips.Text);
+            configuration.ShortTripDistanceThreshold = int.Parse(textShortTripDistanceThreshold.Text);
+            configuration.StartBusinessHour = int.Parse(textStartBusinessHour.Text);
+            configuration.EndBusinessHour = int.Parse(textEndBusinessHour.Text);
+            return configuration;
         }
 
         /// <summary>
         /// Extra validations to test if phone number, start hour, and end hour are in the correct format.
         /// </summary>
-        /// <param name="configurare"></param>
+        /// <param name="configuration"></param>
         /// <exception cref="Exception"></exception>
-        private void ValidateConfigurare(Configurare configurare)
+        private void ValidateConfiguration(Configuration configuration)
         {
             var messages = new List<string>();
-            if (!configurare.PhoneNumber[0].Equals('+'))
+            if (!configuration.PhoneNumber[0].Equals('+'))
             {
                 messages.Add("A phone number should start with '+'!\n");
             }
-            if (configurare.StartBusinessHour < 0 || configurare.StartBusinessHour > 24)
+            if (configuration.StartBusinessHour < 0 || configuration.StartBusinessHour > 24)
             {
                 messages.Add("Invalid Start hour!\n");
             }
-            if (configurare.EndBusinessHour < 0 || configurare.EndBusinessHour > 24)
+            if (configuration.EndBusinessHour < 0 || configuration.EndBusinessHour > 24)
             {
                 messages.Add("Invalid End hour!\n");
             }
-            if (configurare.StartBusinessHour >= configurare.EndBusinessHour)
+            if (configuration.StartBusinessHour >= configuration.EndBusinessHour)
             {
                 messages.Add("End hour should be greater than Start hour!\n");
             }
@@ -167,10 +167,10 @@ namespace ProiectPractica
         /// <param name="e"></param>
         private void buttonReset_Click(object sender, EventArgs e)
         {
-            var configurare = _repository.GetConfigurareFromFile();
-            if (configurare != null)
+            var configuration = _repository.GetConfigurationFromFile();
+            if (configuration != null)
             {
-                SetValuesInTextBoxes(configurare);
+                SetValuesInTextBoxes(configuration);
             }
             MakeButtonsUnavailable();
         }

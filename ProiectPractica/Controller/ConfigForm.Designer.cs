@@ -248,8 +248,9 @@
             Controls.Add(numberOfCars);
             Controls.Add(minPricePerKm);
             Controls.Add(minAcceptablePrice);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "ConfigForm";
-            Text = "Form1";
+            Text = "Configurator";
             ResumeLayout(false);
             PerformLayout();
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProiectPractica.Model
 {
-    public class Configurare
+    public class Configuration
     {
         public int MinAcceptablePrice { get; set; }
         public float MinPricePerKm { get; set; }

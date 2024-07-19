@@ -10,17 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="configurareIncompleta.json" />
-    <None Remove="configurareInvalida.json" />
-    <None Remove="configurareOK.json" />
+    <None Remove="incompleteConfiguration.json" />
+    <None Remove="invalidConfiguration.json" />
+    <None Remove="validConfiguration.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="configurareInvalida.json" />
-    <EmbeddedResource Include="configurareOK.json">
+    <EmbeddedResource Include="ConfigurationsForTest\invalidConfiguration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="configurareIncompleta.json">
+    <EmbeddedResource Include="ConfigurationsForTest\validConfiguration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationsForTest\incompleteConfiguration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
