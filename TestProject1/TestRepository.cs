@@ -10,48 +10,50 @@ namespace TestProject1
     public class TestRepository
     {
         [TestMethod]
-        public void GetConfigurareFromFile_ValidFilePath_ReturnConfigurare()
+        public void GetConfigurationFromFile_ValidFilePath_ReturnConfiguration()
         {
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "configurareOK.json");
-            var repository = new RepositoryConfigurare(stubPath);
+            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "validConfiguration.json");
+            var repository = new RepositoryConfiguration(stubPath);
 
-            var configurare = repository.GetConfigurareFromFile();
+            var configuration = repository.GetConfigurationFromFile();
 
-            Assert.IsNotNull(configurare);
+            Assert.IsNotNull(configuration);
         }
 
         [TestMethod]
-        public void GetConfigurareFromFile_InvalidJson_ReturnNullConfigurare()
-        {
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\\configurareInvalida.json";
-            var repository = new RepositoryConfigurare(stubPath);
-
-            var configurare = repository.GetConfigurareFromFile();
-
-            Assert.IsNull(configurare);
-        }
-
-        [TestMethod]
-        public void GetConfigurareFromFile_InvalidFilePath_ThrowException()
+        public void GetConfigurationFromFile_InvalidJson_ReturnNullConfiguration()
         {
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "configurare.json");
-            var repository = new RepositoryConfigurare(stubPath);
+            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "invalidConfiguration.json");
+            var repository = new RepositoryConfiguration(stubPath);
 
-            Assert.ThrowsException<FileNotFoundException>(() => repository.GetConfigurareFromFile());
+            var configuration = repository.GetConfigurationFromFile();
+
+            Assert.IsNull(configuration);
         }
 
         [TestMethod]
-        public void SaveConfigurare_ValidConfiguration_SaveAndReturnConfiguratie()
+        public void GetConfigurationFromFile_InvalidFilePath_ThrowException()
         {
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "configurareSave.json");
-            var repository = new RepositoryConfigurare(stubPath);
-            var configuration = new Configurare
+            string stubPath = Path.Combine(assemblyDirectory, "configuration.json");
+            var repository = new RepositoryConfiguration(stubPath);
+
+            Assert.ThrowsException<FileNotFoundException>(() => repository.GetConfigurationFromFile());
+        }
+
+        [TestMethod]
+        public void SaveConfiguration_ValidConfiguration_SaveAndReturnConfiguration()
+        {
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "saveConfiguration.json");
+            var repository = new RepositoryConfiguration(stubPath);
+            var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
                 MinPricePerKm = 2,
@@ -64,17 +66,19 @@ namespace TestProject1
                 EndBusinessHour = 9
             };
 
-            var configurareFromWrite = repository.SaveConfigurare(configuration);
+            var configurationFromWrite = repository.SaveConfiguration(configuration);
 
-            Assert.IsNotNull(configurareFromWrite);
+            Assert.IsNotNull(configurationFromWrite);
         }
 
         [TestMethod]
-        public void SaveConfigurare_InvalidPath_ThrowException()
+        public void SaveConfiguration_InvalidPath_ThrowException()
         {
+            // Here I gave an actual invalid file path, because using the method from other tests
+            // will create the file, failing the test.
             var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\test3.json";
-            var repository = new RepositoryConfigurare(stubPath);
-            var configuration = new Configurare
+            var repository = new RepositoryConfiguration(stubPath);
+            var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
                 MinPricePerKm = 2,
@@ -87,26 +91,26 @@ namespace TestProject1
                 EndBusinessHour = 9
             };
 
-            Assert.ThrowsException<IOException>(() => repository.SaveConfigurare(configuration));
+            Assert.ThrowsException<IOException>(() => repository.SaveConfiguration(configuration));
         }
 
         [TestMethod]
-        public void SaveConfigurare_IncompleteConfiguration_SaveAndReturnConfiguratie()
+        public void SaveConfiguration_IncompleteConfiguration_SaveAndReturnConfiguration()
         {
             string assemblyPath = Assembly.GetExecutingAssembly().Location;
             string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "configurareIncompleta.json");
-            var repository = new RepositoryConfigurare(stubPath);
-            var configuration = new Configurare
+            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "incompleteConfiguration.json");
+            var repository = new RepositoryConfiguration(stubPath);
+            var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
                 MinPricePerKm = 2,
                 NumberOfCars = 3
             };
 
-            var configurareFromWrite = repository.SaveConfigurare(configuration);
+            var configurationFromWrite = repository.SaveConfiguration(configuration);
 
-            Assert.IsNotNull(configurareFromWrite);
+            Assert.IsNotNull(configurationFromWrite);
         }
     }
 }
