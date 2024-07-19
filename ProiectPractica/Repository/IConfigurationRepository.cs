@@ -2,7 +2,7 @@
 
 namespace ProiectPractica.Repository
 {
-    internal interface IRepositoryConfiguration
+    internal interface IConfigurationRepository
     {
         public Configuration? GetConfigurationFromFile();
         public Configuration? SaveConfiguration(Configuration configuration);

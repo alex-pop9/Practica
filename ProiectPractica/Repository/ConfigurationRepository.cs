@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 
 namespace ProiectPractica.Repository
 {
-    public class RepositoryConfiguration : IRepositoryConfiguration
+    public class ConfigurationRepository : IConfigurationRepository
     {
         private readonly string _filePath;
-        public RepositoryConfiguration(string filePath) 
+        public ConfigurationRepository(string filePath) 
         { 
             _filePath = filePath;
         }

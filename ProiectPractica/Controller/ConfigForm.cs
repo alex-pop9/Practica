@@ -5,7 +5,7 @@ namespace ProiectPractica
 {
     public partial class ConfigForm : Form
     {
-        private RepositoryConfiguration _repository;
+        private ConfigurationRepository _repository;
         public ConfigForm()
         {
             InitializeComponent();
@@ -15,12 +15,12 @@ namespace ProiectPractica
         /// This function sets the repository, takes the configuration from the file, and puts the object values into text boxes.
         /// If there is an error it shows a Message box and unables all text boxes.
         /// </summary>
-        /// <param name="repositoryConfiguration">Injected repository</param>
-        public void SetRepository(RepositoryConfiguration repositoryConfiguration)
+        /// <param name="configurationRepository">Injected repository</param>
+        public void SetRepository(ConfigurationRepository configurationRepository)
         {
             try
             {
-                _repository = repositoryConfiguration;
+                _repository = configurationRepository;
                 var configurationFromRepo = _repository.GetConfigurationFromFile();
                 if (configurationFromRepo != null)
                 {
@@ -96,8 +96,8 @@ namespace ProiectPractica
         {
             try
             {
-                var configuration = GetconfigurationFromTextBox();
-                Validateconfiguration(configuration);
+                var configuration = GetConfigurationFromTextBox();
+                ValidateConfiguration(configuration);
                 if (_repository.SaveConfiguration(configuration) != null)
                 {
                     MessageBox.Show("Changes saved successfully!");
@@ -114,7 +114,7 @@ namespace ProiectPractica
         /// Reads the text boxes and tries to parse the text into the configuration attributes types.
         /// </summary>
         /// <returns></returns>
-        private Configuration GetconfigurationFromTextBox()
+        private Configuration GetConfigurationFromTextBox()
         {
             var configuration = new Configuration();
             configuration.MinAcceptablePrice = int.Parse(textMinAcceptablePrice.Text);
@@ -134,7 +134,7 @@ namespace ProiectPractica
         /// </summary>
         /// <param name="configuration"></param>
         /// <exception cref="Exception"></exception>
-        private void Validateconfiguration(Configuration configuration)
+        private void ValidateConfiguration(Configuration configuration)
         {
             var messages = new List<string>();
             if (!configuration.PhoneNumber[0].Equals('+'))

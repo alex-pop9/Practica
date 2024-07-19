@@ -1,5 +1,5 @@
 {
-  "MinAcceptablePrice": -600,
+  "MinAcceptablePrice": 60,
   "MinPricePerKm": 17.0,
   "NumberOfCars": 2,
   "ReservationCheckInterval": 2,

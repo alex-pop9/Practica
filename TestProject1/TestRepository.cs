@@ -12,10 +12,10 @@ namespace TestProject1
         [TestMethod]
         public void GetConfigurationFromFile_ValidFilePath_ReturnConfiguration()
         {
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "validConfiguration.json");
-            var repository = new RepositoryConfiguration(stubPath);
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "validConfiguration.json");
+            var repository = new ConfigurationRepository(stubPath);
 
             var configuration = repository.GetConfigurationFromFile();
 
@@ -25,10 +25,10 @@ namespace TestProject1
         [TestMethod]
         public void GetConfigurationFromFile_InvalidJson_ReturnNullConfiguration()
         {
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "invalidConfiguration.json");
-            var repository = new RepositoryConfiguration(stubPath);
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "invalidConfiguration.json");
+            var repository = new ConfigurationRepository(stubPath);
 
             var configuration = repository.GetConfigurationFromFile();
 
@@ -38,10 +38,10 @@ namespace TestProject1
         [TestMethod]
         public void GetConfigurationFromFile_InvalidFilePath_ThrowException()
         {
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "configuration.json");
-            var repository = new RepositoryConfiguration(stubPath);
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            var stubPath = Path.Combine(assemblyDirectory, "configuration.json");
+            var repository = new ConfigurationRepository(stubPath);
 
             Assert.ThrowsException<FileNotFoundException>(() => repository.GetConfigurationFromFile());
         }
@@ -49,10 +49,10 @@ namespace TestProject1
         [TestMethod]
         public void SaveConfiguration_ValidConfiguration_SaveAndReturnConfiguration()
         {
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "saveConfiguration.json");
-            var repository = new RepositoryConfiguration(stubPath);
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "saveConfiguration.json");
+            var repository = new ConfigurationRepository(stubPath);
             var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
@@ -76,8 +76,8 @@ namespace TestProject1
         {
             // Here I gave an actual invalid file path, because using the method from other tests
             // will create the file, failing the test.
-            var stubPath = "C:\\Users\\AlexandruPop\\source\\repos\\ProiectPractica\\TestProject1\test3.json";
-            var repository = new RepositoryConfiguration(stubPath);
+            var stubPath = "C:\test3.json";
+            var repository = new ConfigurationRepository(stubPath);
             var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
@@ -97,10 +97,10 @@ namespace TestProject1
         [TestMethod]
         public void SaveConfiguration_IncompleteConfiguration_SaveAndReturnConfiguration()
         {
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
-            string stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "incompleteConfiguration.json");
-            var repository = new RepositoryConfiguration(stubPath);
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "incompleteConfiguration.json");
+            var repository = new ConfigurationRepository(stubPath);
             var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
