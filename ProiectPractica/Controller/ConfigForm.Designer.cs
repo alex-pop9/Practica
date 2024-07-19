@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             minAcceptablePrice = new Label();
-            minPricePreKm = new Label();
+            minPricePerKm = new Label();
             numberOfCars = new Label();
             reservationCheckInterval = new Label();
             phoneNumber = new Label();
@@ -38,11 +38,11 @@
             startBusinessHour = new Label();
             endBusinessHour = new Label();
             textMinAcceptablePrice = new TextBox();
-            textMinPricePreKm = new TextBox();
+            textMinPricePerKm = new TextBox();
             textNumberOfCars = new TextBox();
-            TextReservationCheckInterval = new TextBox();
+            textReservationCheckInterval = new TextBox();
             textPhoneNumber = new TextBox();
-            textMInPriceForShortTrips = new TextBox();
+            textMinPriceForShortTrips = new TextBox();
             textShortTripDistanceThreshold = new TextBox();
             textStartBusinessHour = new TextBox();
             textEndBusinessHour = new TextBox();
@@ -59,14 +59,14 @@
             minAcceptablePrice.TabIndex = 0;
             minAcceptablePrice.Text = "MinAcceptablePrice:";
             // 
-            // minPricePreKm
+            // minPricePerKm
             // 
-            minPricePreKm.AutoSize = true;
-            minPricePreKm.Location = new Point(113, 245);
-            minPricePreKm.Name = "minPricePreKm";
-            minPricePreKm.Size = new Size(226, 41);
-            minPricePreKm.TabIndex = 1;
-            minPricePreKm.Text = "MinPricePreKm:";
+            minPricePerKm.AutoSize = true;
+            minPricePerKm.Location = new Point(113, 245);
+            minPricePerKm.Name = "minPricePerKm";
+            minPricePerKm.Size = new Size(225, 41);
+            minPricePerKm.TabIndex = 1;
+            minPricePerKm.Text = "MinPricePerKm:";
             // 
             // numberOfCars
             // 
@@ -100,9 +100,9 @@
             minPriceForShortTrips.AutoSize = true;
             minPriceForShortTrips.Location = new Point(847, 132);
             minPriceForShortTrips.Name = "minPriceForShortTrips";
-            minPriceForShortTrips.Size = new Size(316, 41);
+            minPriceForShortTrips.Size = new Size(315, 41);
             minPriceForShortTrips.TabIndex = 5;
-            minPriceForShortTrips.Text = "MInPriceForShortTrips:";
+            minPriceForShortTrips.Text = "MinPriceForShortTrips:";
             // 
             // shortTripDistanceThreshold
             // 
@@ -137,13 +137,15 @@
             textMinAcceptablePrice.Name = "textMinAcceptablePrice";
             textMinAcceptablePrice.Size = new Size(250, 47);
             textMinAcceptablePrice.TabIndex = 9;
+            textMinAcceptablePrice.TextChanged += EnableButtonsWhenTextChanged;
             // 
-            // textMinPricePreKm
+            // textMinPricePerKm
             // 
-            textMinPricePreKm.Location = new Point(475, 245);
-            textMinPricePreKm.Name = "textMinPricePreKm";
-            textMinPricePreKm.Size = new Size(250, 47);
-            textMinPricePreKm.TabIndex = 10;
+            textMinPricePerKm.Location = new Point(475, 245);
+            textMinPricePerKm.Name = "textMinPricePerKm";
+            textMinPricePerKm.Size = new Size(250, 47);
+            textMinPricePerKm.TabIndex = 10;
+            textMinPricePerKm.TextChanged += EnableButtonsWhenTextChanged;
             // 
             // textNumberOfCars
             // 
@@ -151,13 +153,15 @@
             textNumberOfCars.Name = "textNumberOfCars";
             textNumberOfCars.Size = new Size(250, 47);
             textNumberOfCars.TabIndex = 11;
+            textNumberOfCars.TextChanged += EnableButtonsWhenTextChanged;
             // 
-            // TextReservationCheckInterval
+            // textReservationCheckInterval
             // 
-            TextReservationCheckInterval.Location = new Point(475, 476);
-            TextReservationCheckInterval.Name = "TextReservationCheckInterval";
-            TextReservationCheckInterval.Size = new Size(250, 47);
-            TextReservationCheckInterval.TabIndex = 12;
+            textReservationCheckInterval.Location = new Point(475, 476);
+            textReservationCheckInterval.Name = "textReservationCheckInterval";
+            textReservationCheckInterval.Size = new Size(250, 47);
+            textReservationCheckInterval.TabIndex = 12;
+            textReservationCheckInterval.TextChanged += EnableButtonsWhenTextChanged;
             // 
             // textPhoneNumber
             // 
@@ -165,13 +169,15 @@
             textPhoneNumber.Name = "textPhoneNumber";
             textPhoneNumber.Size = new Size(250, 47);
             textPhoneNumber.TabIndex = 13;
+            textPhoneNumber.TextChanged += EnableButtonsWhenTextChanged;
             // 
-            // textMInPriceForShortTrips
+            // textMinPriceForShortTrips
             // 
-            textMInPriceForShortTrips.Location = new Point(1266, 132);
-            textMInPriceForShortTrips.Name = "textMInPriceForShortTrips";
-            textMInPriceForShortTrips.Size = new Size(250, 47);
-            textMInPriceForShortTrips.TabIndex = 14;
+            textMinPriceForShortTrips.Location = new Point(1266, 132);
+            textMinPriceForShortTrips.Name = "textMinPriceForShortTrips";
+            textMinPriceForShortTrips.Size = new Size(250, 47);
+            textMinPriceForShortTrips.TabIndex = 14;
+            textMinPriceForShortTrips.TextChanged += EnableButtonsWhenTextChanged;
             // 
             // textShortTripDistanceThreshold
             // 
@@ -179,6 +185,7 @@
             textShortTripDistanceThreshold.Name = "textShortTripDistanceThreshold";
             textShortTripDistanceThreshold.Size = new Size(250, 47);
             textShortTripDistanceThreshold.TabIndex = 15;
+            textShortTripDistanceThreshold.TextChanged += EnableButtonsWhenTextChanged;
             // 
             // textStartBusinessHour
             // 
@@ -186,6 +193,7 @@
             textStartBusinessHour.Name = "textStartBusinessHour";
             textStartBusinessHour.Size = new Size(250, 47);
             textStartBusinessHour.TabIndex = 16;
+            textStartBusinessHour.TextChanged += EnableButtonsWhenTextChanged;
             // 
             // textEndBusinessHour
             // 
@@ -193,6 +201,7 @@
             textEndBusinessHour.Name = "textEndBusinessHour";
             textEndBusinessHour.Size = new Size(250, 47);
             textEndBusinessHour.TabIndex = 17;
+            textEndBusinessHour.TextChanged += EnableButtonsWhenTextChanged;
             // 
             // buttonSave
             // 
@@ -202,15 +211,17 @@
             buttonSave.TabIndex = 18;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += buttonSave_Click;
             // 
             // buttonReset
             // 
-            buttonReset.Location = new Point(1266, 612);
+            buttonReset.Location = new Point(1265, 612);
             buttonReset.Name = "buttonReset";
             buttonReset.Size = new Size(218, 110);
             buttonReset.TabIndex = 19;
             buttonReset.Text = "Reset";
             buttonReset.UseVisualStyleBackColor = true;
+            buttonReset.Click += buttonReset_Click;
             // 
             // ConfigForm
             // 
@@ -222,11 +233,11 @@
             Controls.Add(textEndBusinessHour);
             Controls.Add(textStartBusinessHour);
             Controls.Add(textShortTripDistanceThreshold);
-            Controls.Add(textMInPriceForShortTrips);
+            Controls.Add(textMinPriceForShortTrips);
             Controls.Add(textPhoneNumber);
-            Controls.Add(TextReservationCheckInterval);
+            Controls.Add(textReservationCheckInterval);
             Controls.Add(textNumberOfCars);
-            Controls.Add(textMinPricePreKm);
+            Controls.Add(textMinPricePerKm);
             Controls.Add(textMinAcceptablePrice);
             Controls.Add(endBusinessHour);
             Controls.Add(startBusinessHour);
@@ -235,7 +246,7 @@
             Controls.Add(phoneNumber);
             Controls.Add(reservationCheckInterval);
             Controls.Add(numberOfCars);
-            Controls.Add(minPricePreKm);
+            Controls.Add(minPricePerKm);
             Controls.Add(minAcceptablePrice);
             Name = "ConfigForm";
             Text = "Form1";
@@ -246,7 +257,7 @@
         #endregion
 
         private Label minAcceptablePrice;
-        private Label minPricePreKm;
+        private Label minPricePerKm;
         private Label numberOfCars;
         private Label reservationCheckInterval;
         private Label phoneNumber;
@@ -255,11 +266,11 @@
         private Label startBusinessHour;
         private Label endBusinessHour;
         private TextBox textMinAcceptablePrice;
-        private TextBox textMinPricePreKm;
+        private TextBox textMinPricePerKm;
         private TextBox textNumberOfCars;
-        private TextBox TextReservationCheckInterval;
+        private TextBox textReservationCheckInterval;
         private TextBox textPhoneNumber;
-        private TextBox textMInPriceForShortTrips;
+        private TextBox textMinPriceForShortTrips;
         private TextBox textShortTripDistanceThreshold;
         private TextBox textStartBusinessHour;
         private TextBox textEndBusinessHour;
