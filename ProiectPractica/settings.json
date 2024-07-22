@@ -1,11 +1,11 @@
 {
   "MinAcceptablePrice": 60,
-  "MinPricePerKm": 17.0,
-  "NumberOfCars": 2,
+  "MinPricePerKm": 175.0,
+  "NumberOfCars": 3,
   "ReservationCheckInterval": 2,
   "PhoneNumber": "+407476333574",
   "MinPriceForShortTrips": 50,
   "ShortTripDistanceThreshold": 15,
   "StartBusinessHour": 9,
-  "EndBusinessHour": 24
+  "EndBusinessHour": 12
 }
