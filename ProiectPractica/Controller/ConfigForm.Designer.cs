@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             minAcceptablePrice = new Label();
             minPricePerKm = new Label();
             numberOfCars = new Label();
@@ -48,92 +49,102 @@
             textEndBusinessHour = new TextBox();
             buttonSave = new Button();
             buttonReset = new Button();
+            toolTipForConfigurationJson = new ToolTip(components);
             SuspendLayout();
             // 
             // minAcceptablePrice
             // 
             minAcceptablePrice.AutoSize = true;
-            minAcceptablePrice.Location = new Point(113, 138);
+            minAcceptablePrice.Location = new Point(113, 127);
             minAcceptablePrice.Name = "minAcceptablePrice";
-            minAcceptablePrice.Size = new Size(287, 41);
+            minAcceptablePrice.Size = new Size(379, 41);
             minAcceptablePrice.TabIndex = 0;
-            minAcceptablePrice.Text = "MinAcceptablePrice:";
+            minAcceptablePrice.Text = "Minimum Acceptable Price:";
+            toolTipForConfigurationJson.SetToolTip(minAcceptablePrice, "MinAcceptablePrice");
             // 
             // minPricePerKm
             // 
             minPricePerKm.AutoSize = true;
             minPricePerKm.Location = new Point(113, 245);
             minPricePerKm.Name = "minPricePerKm";
-            minPricePerKm.Size = new Size(225, 41);
+            minPricePerKm.Size = new Size(390, 41);
             minPricePerKm.TabIndex = 1;
-            minPricePerKm.Text = "MinPricePerKm:";
+            minPricePerKm.Text = "Minimum Price For One Km:";
+            toolTipForConfigurationJson.SetToolTip(minPricePerKm, "MinPricePerKm");
             // 
             // numberOfCars
             // 
             numberOfCars.AutoSize = true;
             numberOfCars.Location = new Point(113, 364);
             numberOfCars.Name = "numberOfCars";
-            numberOfCars.Size = new Size(223, 41);
+            numberOfCars.Size = new Size(239, 41);
             numberOfCars.TabIndex = 2;
-            numberOfCars.Text = "NumberOfCars:";
+            numberOfCars.Text = "Number Of Cars:";
+            toolTipForConfigurationJson.SetToolTip(numberOfCars, "NumberOfCars");
             // 
             // reservationCheckInterval
             // 
             reservationCheckInterval.AutoSize = true;
             reservationCheckInterval.Location = new Point(113, 482);
             reservationCheckInterval.Name = "reservationCheckInterval";
-            reservationCheckInterval.Size = new Size(356, 41);
+            reservationCheckInterval.Size = new Size(423, 41);
             reservationCheckInterval.TabIndex = 3;
-            reservationCheckInterval.Text = "ReservationCheckInterval:";
+            reservationCheckInterval.Text = "Interval For Reservation Check:";
+            toolTipForConfigurationJson.SetToolTip(reservationCheckInterval, "ReservationCheckInterval");
             // 
             // phoneNumber
             // 
             phoneNumber.AutoSize = true;
-            phoneNumber.Location = new Point(113, 612);
+            phoneNumber.Location = new Point(113, 606);
             phoneNumber.Name = "phoneNumber";
-            phoneNumber.Size = new Size(219, 41);
+            phoneNumber.Size = new Size(227, 41);
             phoneNumber.TabIndex = 4;
-            phoneNumber.Text = "PhoneNumber:";
+            phoneNumber.Text = "Phone Number:";
+            toolTipForConfigurationJson.SetToolTip(phoneNumber, "PhoneNumber");
             // 
             // minPriceForShortTrips
             // 
             minPriceForShortTrips.AutoSize = true;
-            minPriceForShortTrips.Location = new Point(847, 132);
+            minPriceForShortTrips.Location = new Point(947, 127);
             minPriceForShortTrips.Name = "minPriceForShortTrips";
-            minPriceForShortTrips.Size = new Size(315, 41);
+            minPriceForShortTrips.Size = new Size(423, 41);
             minPriceForShortTrips.TabIndex = 5;
-            minPriceForShortTrips.Text = "MinPriceForShortTrips:";
+            minPriceForShortTrips.Text = "Minimum Price For Short Trips:";
+            toolTipForConfigurationJson.SetToolTip(minPriceForShortTrips, "MinPriceForShortTrips");
             // 
             // shortTripDistanceThreshold
             // 
             shortTripDistanceThreshold.AutoSize = true;
-            shortTripDistanceThreshold.Location = new Point(847, 245);
+            shortTripDistanceThreshold.Location = new Point(947, 245);
             shortTripDistanceThreshold.Name = "shortTripDistanceThreshold";
-            shortTripDistanceThreshold.Size = new Size(389, 41);
+            shortTripDistanceThreshold.Size = new Size(477, 41);
             shortTripDistanceThreshold.TabIndex = 6;
-            shortTripDistanceThreshold.Text = "ShortTripDistanceThreshold:";
+            shortTripDistanceThreshold.Text = "Threshold For Short Distance Trips:";
+            toolTipForConfigurationJson.SetToolTip(shortTripDistanceThreshold, "ShortTripDistanceThreshold");
             // 
             // startBusinessHour
             // 
             startBusinessHour.AutoSize = true;
-            startBusinessHour.Location = new Point(847, 364);
+            startBusinessHour.Location = new Point(947, 367);
             startBusinessHour.Name = "startBusinessHour";
-            startBusinessHour.Size = new Size(264, 41);
+            startBusinessHour.Size = new Size(368, 41);
             startBusinessHour.TabIndex = 7;
-            startBusinessHour.Text = "StartBusinessHour:";
+            startBusinessHour.Text = "Start Of Business Program:";
+            toolTipForConfigurationJson.SetToolTip(startBusinessHour, "StartBusinessHour");
             // 
             // endBusinessHour
             // 
             endBusinessHour.AutoSize = true;
-            endBusinessHour.Location = new Point(847, 479);
+            endBusinessHour.Location = new Point(947, 482);
             endBusinessHour.Name = "endBusinessHour";
-            endBusinessHour.Size = new Size(254, 41);
+            endBusinessHour.Size = new Size(358, 41);
             endBusinessHour.TabIndex = 8;
-            endBusinessHour.Text = "EndBusinessHour:";
+            endBusinessHour.Text = "End Of Business Program:";
+            toolTipForConfigurationJson.SetToolTip(endBusinessHour, "EndBusinessHour");
             // 
             // textMinAcceptablePrice
             // 
-            textMinAcceptablePrice.Location = new Point(475, 138);
+            textMinAcceptablePrice.Location = new Point(559, 121);
             textMinAcceptablePrice.Name = "textMinAcceptablePrice";
             textMinAcceptablePrice.Size = new Size(250, 47);
             textMinAcceptablePrice.TabIndex = 9;
@@ -141,7 +152,7 @@
             // 
             // textMinPricePerKm
             // 
-            textMinPricePerKm.Location = new Point(475, 245);
+            textMinPricePerKm.Location = new Point(559, 239);
             textMinPricePerKm.Name = "textMinPricePerKm";
             textMinPricePerKm.Size = new Size(250, 47);
             textMinPricePerKm.TabIndex = 10;
@@ -149,7 +160,7 @@
             // 
             // textNumberOfCars
             // 
-            textNumberOfCars.Location = new Point(475, 358);
+            textNumberOfCars.Location = new Point(559, 358);
             textNumberOfCars.Name = "textNumberOfCars";
             textNumberOfCars.Size = new Size(250, 47);
             textNumberOfCars.TabIndex = 11;
@@ -157,7 +168,7 @@
             // 
             // textReservationCheckInterval
             // 
-            textReservationCheckInterval.Location = new Point(475, 476);
+            textReservationCheckInterval.Location = new Point(559, 479);
             textReservationCheckInterval.Name = "textReservationCheckInterval";
             textReservationCheckInterval.Size = new Size(250, 47);
             textReservationCheckInterval.TabIndex = 12;
@@ -165,7 +176,7 @@
             // 
             // textPhoneNumber
             // 
-            textPhoneNumber.Location = new Point(475, 612);
+            textPhoneNumber.Location = new Point(559, 600);
             textPhoneNumber.Name = "textPhoneNumber";
             textPhoneNumber.Size = new Size(250, 47);
             textPhoneNumber.TabIndex = 13;
@@ -173,7 +184,7 @@
             // 
             // textMinPriceForShortTrips
             // 
-            textMinPriceForShortTrips.Location = new Point(1266, 132);
+            textMinPriceForShortTrips.Location = new Point(1462, 124);
             textMinPriceForShortTrips.Name = "textMinPriceForShortTrips";
             textMinPriceForShortTrips.Size = new Size(250, 47);
             textMinPriceForShortTrips.TabIndex = 14;
@@ -181,7 +192,7 @@
             // 
             // textShortTripDistanceThreshold
             // 
-            textShortTripDistanceThreshold.Location = new Point(1266, 245);
+            textShortTripDistanceThreshold.Location = new Point(1462, 239);
             textShortTripDistanceThreshold.Name = "textShortTripDistanceThreshold";
             textShortTripDistanceThreshold.Size = new Size(250, 47);
             textShortTripDistanceThreshold.TabIndex = 15;
@@ -189,7 +200,7 @@
             // 
             // textStartBusinessHour
             // 
-            textStartBusinessHour.Location = new Point(1266, 358);
+            textStartBusinessHour.Location = new Point(1462, 358);
             textStartBusinessHour.Name = "textStartBusinessHour";
             textStartBusinessHour.Size = new Size(250, 47);
             textStartBusinessHour.TabIndex = 16;
@@ -197,7 +208,7 @@
             // 
             // textEndBusinessHour
             // 
-            textEndBusinessHour.Location = new Point(1266, 476);
+            textEndBusinessHour.Location = new Point(1462, 479);
             textEndBusinessHour.Name = "textEndBusinessHour";
             textEndBusinessHour.Size = new Size(250, 47);
             textEndBusinessHour.TabIndex = 17;
@@ -205,7 +216,7 @@
             // 
             // buttonSave
             // 
-            buttonSave.Location = new Point(893, 612);
+            buttonSave.Location = new Point(1029, 600);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(218, 110);
             buttonSave.TabIndex = 18;
@@ -215,7 +226,7 @@
             // 
             // buttonReset
             // 
-            buttonReset.Location = new Point(1265, 612);
+            buttonReset.Location = new Point(1419, 600);
             buttonReset.Name = "buttonReset";
             buttonReset.Size = new Size(218, 110);
             buttonReset.TabIndex = 19;
@@ -227,7 +238,7 @@
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1650, 820);
+            ClientSize = new Size(1863, 785);
             Controls.Add(buttonReset);
             Controls.Add(buttonSave);
             Controls.Add(textEndBusinessHour);
@@ -277,5 +288,6 @@
         private TextBox textEndBusinessHour;
         private Button buttonSave;
         private Button buttonReset;
+        private ToolTip toolTipForConfigurationJson;
     }
 }
