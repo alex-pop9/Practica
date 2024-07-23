@@ -158,10 +158,10 @@
             textMinAcceptablePrice.Name = "textMinAcceptablePrice";
             textMinAcceptablePrice.Size = new Size(250, 47);
             textMinAcceptablePrice.TabIndex = 9;
-            textMinAcceptablePrice.TextChanged += MinAcceptablePriceTextChanged;
+            textMinAcceptablePrice.TextChanged += TextChangedInt;
             textMinAcceptablePrice.TextChanged += EnableButtonsWhenTextChanged;
-            textMinAcceptablePrice.Validating += MinAcceptablePriceValidating;
-            textMinAcceptablePrice.Validated += MinAcceptablePriceValidated;
+            textMinAcceptablePrice.Validating += ValidatingInt;
+            textMinAcceptablePrice.Validated += ValidatedInt;
             // 
             // textMinPricePerKm
             // 
@@ -170,9 +170,9 @@
             textMinPricePerKm.Size = new Size(250, 47);
             textMinPricePerKm.TabIndex = 10;
             textMinPricePerKm.TextChanged += EnableButtonsWhenTextChanged;
-            textMinPricePerKm.TextChanged += MinPricePerKmTextChanged;
-            textMinPricePerKm.Validating += MinPricePerKmValidating;
-            textMinPricePerKm.Validated += MinPricePerKmValidated;
+            textMinPricePerKm.TextChanged += TextChangedFloat;
+            textMinPricePerKm.Validating += ValidatingFloat;
+            textMinPricePerKm.Validated += ValidatedFloat;
             // 
             // textNumberOfCars
             // 
@@ -181,9 +181,9 @@
             textNumberOfCars.Size = new Size(250, 47);
             textNumberOfCars.TabIndex = 11;
             textNumberOfCars.TextChanged += EnableButtonsWhenTextChanged;
-            textNumberOfCars.TextChanged += NumberOfCarsTextChanged;
-            textNumberOfCars.Validated += NumberOfCarsValidated;
-            textNumberOfCars.Validating += NumberOfCarsValidating;
+            textNumberOfCars.TextChanged += TextChangedInt;
+            textNumberOfCars.Validated += ValidatedInt;
+            textNumberOfCars.Validating += ValidatingInt;
             // 
             // textReservationCheckInterval
             // 
@@ -192,9 +192,9 @@
             textReservationCheckInterval.Size = new Size(250, 47);
             textReservationCheckInterval.TabIndex = 12;
             textReservationCheckInterval.TextChanged += EnableButtonsWhenTextChanged;
-            textReservationCheckInterval.TextChanged += ReservationCheckIntervalTextChanged;
-            textReservationCheckInterval.Validated += ReservationCheckIntervalValidated;
-            textReservationCheckInterval.Validating += ReservationCheckIntervalValidating;
+            textReservationCheckInterval.TextChanged += TextChangedInt;
+            textReservationCheckInterval.Validated += ValidatedInt;
+            textReservationCheckInterval.Validating += ValidatingInt;
             // 
             // textPhoneNumber
             // 
@@ -211,9 +211,9 @@
             textMinPriceForShortTrips.Size = new Size(250, 47);
             textMinPriceForShortTrips.TabIndex = 14;
             textMinPriceForShortTrips.TextChanged += EnableButtonsWhenTextChanged;
-            textMinPriceForShortTrips.TextChanged += MinPriceForShortTripsTextChanged;
-            textMinPriceForShortTrips.Validated += MinPriceForShortTripsValidated;
-            textMinPriceForShortTrips.Validating += MinPriceForShortTripsValidating;
+            textMinPriceForShortTrips.TextChanged += TextChangedInt;
+            textMinPriceForShortTrips.Validated += ValidatedInt;
+            textMinPriceForShortTrips.Validating += ValidatingInt;
             // 
             // textShortTripDistanceThreshold
             // 
@@ -222,9 +222,9 @@
             textShortTripDistanceThreshold.Size = new Size(250, 47);
             textShortTripDistanceThreshold.TabIndex = 15;
             textShortTripDistanceThreshold.TextChanged += EnableButtonsWhenTextChanged;
-            textShortTripDistanceThreshold.TextChanged += ShortTripDistanceThresholdTextChanged;
-            textShortTripDistanceThreshold.Validated += ShortTripDistanceThresholdValidated;
-            textShortTripDistanceThreshold.Validating += ShortTripDistanceThresholdValidating;
+            textShortTripDistanceThreshold.TextChanged += TextChangedInt;
+            textShortTripDistanceThreshold.Validated += ValidatedInt;
+            textShortTripDistanceThreshold.Validating += ValidatingInt;
             // 
             // textStartBusinessHour
             // 

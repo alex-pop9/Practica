@@ -1,12 +1,14 @@
 using ProiectPractica.Model;
 using ProiectPractica.Repository;
 using System.Globalization;
+using ProiectPractica.Validator;
 
 namespace ProiectPractica
 {
     public partial class ConfigForm : Form
     {
         private ConfigurationRepository _repository;
+        private ConfigurationValidator _validator;
         public ConfigForm()
         {
             InitializeComponent();
@@ -19,25 +21,23 @@ namespace ProiectPractica
         /// <param name="configurationRepository">Injected repository</param>
         public void SetRepository(ConfigurationRepository configurationRepository)
         {
-            try
+            _repository = configurationRepository;
+            var configurationFromRepo = _repository.GetConfigurationFromFile();
+            if (configurationFromRepo != null)
             {
-                _repository = configurationRepository;
-                var configurationFromRepo = _repository.GetConfigurationFromFile();
-                if (configurationFromRepo != null)
-                {
-                    SetValuesInTextBoxes(configurationFromRepo);
-                }
-                else
-                {
-                    throw new Exception("Error loading the Configuration from the file!");
-                }
-                MakeButtonsUnavailable();
+                SetValuesInTextBoxes(configurationFromRepo);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {     
+                MessageBox.Show("Error loading the Configuration from the file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 MakeTextBoxesUnavailable();
             }
+            MakeButtonsUnavailable();
+        }
+
+        public void SetValidator(ConfigurationValidator configurationValidator)
+        {
+            _validator = configurationValidator;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ProiectPractica
         private void SetValuesInTextBoxes(Configuration configuration)
         {
             textMinAcceptablePrice.Text = configuration.MinAcceptablePrice.ToString();
-            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString();
+            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString(CultureInfo.CreateSpecificCulture("de-DE"));
             textNumberOfCars.Text = configuration.NumberOfCars.ToString();
             textReservationCheckInterval.Text = configuration.ReservationCheckInterval.ToString();
             textPhoneNumber.Text = configuration.PhoneNumber;
@@ -100,21 +100,14 @@ namespace ProiectPractica
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonSave_Click(object sender, EventArgs e)
+        private async void buttonSave_Click(object sender, EventArgs e)
         {
-            try
+            var configuration = GetConfigurationFromTextBox();
+            if (_repository.SaveConfiguration(configuration) != null)
             {
-                var configuration = GetConfigurationFromTextBox();
-                if (_repository.SaveConfiguration(configuration) != null)
-                {
-                    MessageBox.Show("Changes saved successfully!");
-                }
-                MakeButtonsUnavailable();
+                MessageBox.Show("Changes saved successfully!");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            MakeButtonsUnavailable();
         }
 
         /// <summary>
@@ -151,190 +144,77 @@ namespace ProiectPractica
             MakeButtonsUnavailable();
         }
 
-        private void MinAcceptablePriceValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ValidatingInt(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string errorMsg;
-            if (!ValidateInt(textMinAcceptablePrice.Text, out errorMsg))
+            var textBox = (TextBox)sender;
+            if (!_validator.ValidateInt(textBox.Text, out string errorMessage))
             {
                 e.Cancel = true;
-                errorProviderForConfiguration.SetError(textMinAcceptablePrice, errorMsg);
+                errorProviderForConfiguration.SetError(textBox, errorMessage);
             }
         }
 
-        private void MinAcceptablePriceValidated(object sender, EventArgs e)
+        private void ValidatedInt(object sender, EventArgs e)
         {
-            errorProviderForConfiguration.SetError(textMinAcceptablePrice,"");
+            var textBox = (TextBox)sender;
+            errorProviderForConfiguration.SetError(textBox, "");
         }
 
-        private void MinAcceptablePriceTextChanged(object sender, EventArgs e)
+        private void TextChangedInt(object sender, EventArgs e)
         {
-            var errorMessage = String.Empty;
-            if (!ValidateInt(textMinAcceptablePrice.Text, out errorMessage))
+            var textBox = (TextBox)sender;
+            var errorLabel = Controls.Find("errorLabel" + textBox.Name[4..], true).FirstOrDefault() as Label;
+            if (!_validator.ValidateInt(textBox.Text, out string errorMessage))
             {
-                errorLabelMinAcceptablePrice.Text = errorMessage;
-                errorLabelMinAcceptablePrice.ForeColor = Color.Red;
+                errorLabel.Text = errorMessage;
+                errorLabel.ForeColor = Color.Red;
             }
             else
             {
-                errorLabelMinAcceptablePrice.Text = String.Empty;
+                errorLabel.Text = string.Empty;
             }
         }
 
-        private void MinPricePerKmValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ValidatingFloat(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string errorMsg;
-            if (!ValidateFloat(textMinPricePerKm.Text, out errorMsg))
-            {
-                e.Cancel = true; 
-                errorProviderForConfiguration.SetError(textMinPricePerKm, errorMsg);
-            }
-        }
-
-        private void MinPricePerKmValidated(object sender, EventArgs e)
-        {
-            errorProviderForConfiguration.SetError(textMinPricePerKm, "");
-        }
-
-        private void MinPricePerKmTextChanged(object sender, EventArgs e)
-        {
-            var errorMessage = String.Empty;
-            if (!ValidateFloat(textMinPricePerKm.Text, out errorMessage))
-            {
-                errorLabelMinPricePerKm.Text = errorMessage;
-                errorLabelMinPricePerKm.ForeColor = Color.Red;
-            }
-            else
-            {
-                errorLabelMinPricePerKm.Text = String.Empty;
-            }
-        }
-
-        private void NumberOfCarsValidating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            string errorMsg;
-            if (!ValidateInt(textNumberOfCars.Text, out errorMsg))
+            var textBox = (TextBox)sender;
+            if (!_validator.ValidateFloat(textBox.Text, out string errorMessage))
             {
                 e.Cancel = true;
-                errorProviderForConfiguration.SetError(textNumberOfCars, errorMsg);
+                errorProviderForConfiguration.SetError(textBox, errorMessage);
             }
         }
 
-        private void NumberOfCarsValidated(object sender, EventArgs e)
+        private void ValidatedFloat(object sender, EventArgs e)
         {
-            errorProviderForConfiguration.SetError(textNumberOfCars, "");
+            var textBox = (TextBox)sender;
+            errorProviderForConfiguration.SetError(textBox, "");
         }
 
-        private void NumberOfCarsTextChanged(object sender, EventArgs e)
+        private void TextChangedFloat(object sender, EventArgs e)
         {
-            var errorMessage = String.Empty;
-            if (!ValidateInt(textNumberOfCars.Text, out errorMessage))
+            var textBox = (TextBox)sender;
+            var errorLabel = Controls.Find("errorLabel" + textBox.Name[4..], true).FirstOrDefault() as Label;
+            if (!_validator.ValidateFloat(textBox.Text, out string errorMessage))
             {
-                errorLabelNumberOfCars.Text = errorMessage;
-                errorLabelNumberOfCars.ForeColor = Color.Red;
-            }
-            else
-            {
-                errorLabelNumberOfCars.Text = String.Empty;
-            }
-        }
-
-        private void ReservationCheckIntervalValidating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            string errorMsg;
-            if (!ValidateInt(textReservationCheckInterval.Text, out errorMsg))
-            {
-                e.Cancel = true;
-                errorProviderForConfiguration.SetError(textReservationCheckInterval, errorMsg);
-            }
-        }
-
-        private void ReservationCheckIntervalValidated(object sender, EventArgs e)
-        {
-            errorProviderForConfiguration.SetError(textReservationCheckInterval, "");
-        }
-
-        private void ReservationCheckIntervalTextChanged(object sender, EventArgs e)
-        {
-            var errorMessage = String.Empty;
-            if (!ValidateInt(textReservationCheckInterval.Text, out errorMessage))
-            {
-                errorLabelReservationCheckInterval.Text = errorMessage;
-                errorLabelReservationCheckInterval.ForeColor = Color.Red;
+                errorLabel.Text = errorMessage;
+                errorLabel.ForeColor = Color.Red;
             }
             else
             {
-                errorLabelReservationCheckInterval.Text = String.Empty;
-            }
-        }
-
-        private void MinPriceForShortTripsValidating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            string errorMsg;
-            if (!ValidateInt(textMinPriceForShortTrips.Text, out errorMsg))
-            {
-                e.Cancel = true;
-                errorProviderForConfiguration.SetError(textMinPriceForShortTrips, errorMsg);
-            }
-        }
-
-        private void MinPriceForShortTripsValidated(object sender, EventArgs e)
-        {
-            errorProviderForConfiguration.SetError(textMinPriceForShortTrips, "");
-        }
-
-        private void MinPriceForShortTripsTextChanged(object sender, EventArgs e)
-        {
-            var errorMessage = String.Empty;
-            if (!ValidateInt(textMinPriceForShortTrips.Text, out errorMessage))
-            {
-                errorLabelMinPriceForShortTrips.Text = errorMessage;
-                errorLabelMinPriceForShortTrips.ForeColor = Color.Red;
-            }
-            else
-            {
-                errorLabelMinPriceForShortTrips.Text = String.Empty;
-            }
-        }
-
-        private void ShortTripDistanceThresholdValidating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            string errorMsg;
-            if (!ValidateInt(textShortTripDistanceThreshold.Text, out errorMsg))
-            {
-                e.Cancel = true;
-                errorProviderForConfiguration.SetError(textShortTripDistanceThreshold, errorMsg);
-            }
-        }
-
-        private void ShortTripDistanceThresholdValidated(object sender, EventArgs e)
-        {
-            errorProviderForConfiguration.SetError(textShortTripDistanceThreshold, "");
-        }
-
-        private void ShortTripDistanceThresholdTextChanged(object sender, EventArgs e)
-        {
-            var errorMessage = String.Empty;
-            if (!ValidateInt(textShortTripDistanceThreshold.Text, out errorMessage))
-            {
-                errorLabelShortTripDistanceThreshold.Text = errorMessage;
-                errorLabelShortTripDistanceThreshold.ForeColor = Color.Red;
-            }
-            else
-            {
-                errorLabelShortTripDistanceThreshold.Text = String.Empty;
+                errorLabel.Text = string.Empty;
             }
         }
 
         private void StartBusinessHourValidating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string errorMsg;
-            if (!ValidateHour(textStartBusinessHour.Text, out errorMsg))
+            string errorMessage;
+            if (!_validator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 e.Cancel = true;
-                errorProviderForConfiguration.SetError(textStartBusinessHour, errorMsg);
+                errorProviderForConfiguration.SetError(textStartBusinessHour, errorMessage);
             }
         }
-
         private void StartBusinessHourValidated(object sender, EventArgs e)
         {
             errorProviderForConfiguration.SetError(textStartBusinessHour, "");
@@ -342,25 +222,25 @@ namespace ProiectPractica
 
         private void StartBusinessHourTextChanged(object sender, EventArgs e)
         {
-            var errorMessage = String.Empty;
-            if (!ValidateHour(textStartBusinessHour.Text, out errorMessage))
+            var errorMessage = string.Empty;
+            if (!_validator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 errorLabelStartBusinessHour.Text = errorMessage;
                 errorLabelStartBusinessHour.ForeColor = Color.Red;
             }
             else
             {
-                errorLabelStartBusinessHour.Text = String.Empty;
+                errorLabelStartBusinessHour.Text = string.Empty;
             }
         }
 
         private void EndBusinessHourValidating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string errorMsg;
-            if (!ValidateHour(textEndBusinessHour.Text, out errorMsg))
+            var errorMessage = string.Empty;
+            if (!_validator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 e.Cancel = true;
-                errorProviderForConfiguration.SetError(textEndBusinessHour, errorMsg);
+                errorProviderForConfiguration.SetError(textEndBusinessHour, errorMessage);
             }
         }
 
@@ -371,131 +251,21 @@ namespace ProiectPractica
 
         private void EndBusinessHourTextChanged(object sender, EventArgs e)
         {
-            var errorMessage = String.Empty;
-            if (!ValidateHour(textEndBusinessHour.Text, out errorMessage))
+            var errorMessage = string.Empty;
+            if (!_validator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 errorLabelEndBusinessHour.Text = errorMessage;
                 errorLabelEndBusinessHour.ForeColor = Color.Red;
             }
             else
             {
-                errorLabelEndBusinessHour.Text = String.Empty;
+                errorLabelEndBusinessHour.Text = string.Empty;
             }
         }
 
-        /// <summary>
-        /// Validates a string so that it can be parsed into an integer.
-        /// Returns true if the string can be parsed as an integer,
-        /// and returns false otherwise.
-        /// </summary>
-        /// <param name="textToBeValidated"></param>
-        /// <param name="errorMessage"></param>
-        /// <returns></returns>
-        private bool ValidateInt(string textToBeValidated, out string errorMessage)
+        private bool CheckEndHourGreaterThanStartHour(out string errorMessage)
         {
-            if (textToBeValidated.Length == 0)
-            {
-                errorMessage = "Field should not be empty!";
-                return false;
-            }
-            try
-            {
-               var integer = int.Parse(textToBeValidated);
-                if (integer < 0)
-                {
-                    errorMessage = "The number should be positive!";
-                    return false;
-                }
-            }
-            catch (FormatException)
-            {
-                errorMessage = "This should be a number!";
-                return false;
-            }
-            catch (OverflowException)
-            {
-                errorMessage = "The number is to big!";
-                return false;
-            }
-            errorMessage = "";
-            return true;
-        }
-
-        /// <summary>
-        /// Validates a string so that it can be parsed into a float.
-        /// Returns true if the string can be parsed as a float,
-        /// and it returns false otherwise.
-        /// </summary>
-        /// <param name="textToBeValidated"></param>
-        /// <param name="errorMessage"></param>
-        /// <returns></returns>
-        private bool ValidateFloat(string textToBeValidated, out string errorMessage)
-        {
-            if (textToBeValidated.Length == 0)
-            {
-                errorMessage = "Field should not be empty!";
-                return false;
-            }
-            try
-            {
-                var floatNumber = float.Parse(textToBeValidated);
-                if (floatNumber < 0)
-                {
-                    errorMessage = "The number should be positive!";
-                    return false;
-                }
-                if (floatNumber > float.MaxValue)
-                {
-                    errorMessage = "The number is to big!";
-                    return false;
-                }
-            }
-            catch (FormatException)
-            {
-                errorMessage = "This should be a number!";
-                return false;
-            }
-            errorMessage = "";
-            return true;
-        }
-
-        /// <summary>
-        /// Validates a string so that it can be parsed into an integer that represents an hour.
-        /// Returns true if the string can be parsed as an hour,
-        /// and it returns false otherwise.
-        /// It also checks if the end hour is greater than start hour
-        /// </summary>
-        /// <param name="textToBeValidated"></param>
-        /// <param name="errorMessage"></param>
-        /// <returns></returns>
-        private bool ValidateHour(string textToBeValidated, out string errorMessage)
-        {
-            if (textToBeValidated.Length == 0)
-            {
-                errorMessage = "Field should not be empty!";
-                return false;
-            }
-            try
-            {
-                var hour = int.Parse(textToBeValidated);
-                if (hour < 0 || hour > 23)
-                {
-                    errorMessage = "Invalid hour!";
-                    return false;
-                }
-            }
-            catch (FormatException)
-            {
-                errorMessage = "This should be a number!";
-                return false;
-            }
-            catch (OverflowException)
-            {
-                errorMessage = "The number is to big!";
-                return false;
-            }
-            try // when loading the text boxes for the first time or at reset, the start hour is loaded
-                // first, so it tries to compare start hour with end hour, but end hour is empty, raising an error 
+            if(_validator.ValidateHour(textStartBusinessHour.Text,out errorMessage) && _validator.ValidateHour(textEndBusinessHour.Text, out errorMessage))
             {
                 if (int.Parse(textEndBusinessHour.Text) <= int.Parse(textStartBusinessHour.Text))
                 {
@@ -503,12 +273,7 @@ namespace ProiectPractica
                     return false;
                 }
             }
-            catch
-            {
-                errorMessage = "";
-                return true;
-            }
-            errorMessage = "";
+            errorMessage = string.Empty;
             return true;
         }
     }
