@@ -2,6 +2,7 @@ using ProiectPractica.Model;
 using System;
 using ProiectPractica.Repository;
 using System.Configuration;
+using ProiectPractica.Validator;
 
 namespace ProiectPractica
 {

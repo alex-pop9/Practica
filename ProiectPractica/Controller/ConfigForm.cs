@@ -1,5 +1,7 @@
 using ProiectPractica.Model;
 using ProiectPractica.Repository;
+using System.Globalization;
+using ProiectPractica.Validator;
 
 namespace ProiectPractica
 {
@@ -18,25 +20,18 @@ namespace ProiectPractica
         /// <param name="configurationRepository">Injected repository</param>
         public void SetRepository(ConfigurationRepository configurationRepository)
         {
-            try
+            _repository = configurationRepository;
+            var configurationFromRepo = _repository.GetConfigurationFromFile();
+            if (configurationFromRepo != null)
             {
-                _repository = configurationRepository;
-                var configurationFromRepo = _repository.GetConfigurationFromFile();
-                if (configurationFromRepo != null)
-                {
-                    SetValuesInTextBoxes(configurationFromRepo);
-                }
-                else
-                {
-                    throw new Exception("Error loading the Configuration from the file!");
-                }
-                MakeButtonsUnavailable();
+                SetValuesInTextBoxes(configurationFromRepo);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {     
+                MessageBox.Show("Error loading the Configuration from the file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 MakeTextBoxesUnavailable();
             }
+            MakeButtonsUnavailable();
         }
 
         /// <summary>
@@ -46,7 +41,7 @@ namespace ProiectPractica
         private void SetValuesInTextBoxes(Configuration configuration)
         {
             textMinAcceptablePrice.Text = configuration.MinAcceptablePrice.ToString();
-            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString();
+            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString(CultureInfo.CreateSpecificCulture("de-DE"));
             textNumberOfCars.Text = configuration.NumberOfCars.ToString();
             textReservationCheckInterval.Text = configuration.ReservationCheckInterval.ToString();
             textPhoneNumber.Text = configuration.PhoneNumber;
@@ -76,38 +71,37 @@ namespace ProiectPractica
         }
 
         /// <summary>
-        /// This function handles all text boxes .TextChanged event so that I don't have 9 identical functions.
+        /// Enables the Reset button at change text and Save button if all validations are passed at text change.
         /// I got the idea from here: https://stackoverflow.com/a/12460227
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EnableButtonsWhenTextChanged(object sender, EventArgs e)
         {
+            if (!ValidateChildren())
+            {
+                buttonSave.Enabled = false;
+            }
+            else
+            {
+                buttonSave.Enabled = true;
+            }
             buttonReset.Enabled = true;
-            buttonSave.Enabled = true;
         }
 
         /// <summary>
-        /// It gets the configuration from text boxes, validates it and saves the configuration in the file.
+        /// It gets the configuration from text boxes  and saves the configuration in the file.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonSave_Click(object sender, EventArgs e)
+        private async void buttonSave_Click(object sender, EventArgs e)
         {
-            try
+            var configuration = GetConfigurationFromTextBox();
+            if (_repository.SaveConfiguration(configuration) != null)
             {
-                var configuration = GetConfigurationFromTextBox();
-                ValidateConfiguration(configuration);
-                if (_repository.SaveConfiguration(configuration) != null)
-                {
-                    MessageBox.Show("Changes saved successfully!");
-                }
-                MakeButtonsUnavailable();
+                MessageBox.Show("Changes saved successfully!");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            MakeButtonsUnavailable();
         }
 
         /// <summary>
@@ -118,7 +112,7 @@ namespace ProiectPractica
         {
             var configuration = new Configuration();
             configuration.MinAcceptablePrice = int.Parse(textMinAcceptablePrice.Text);
-            configuration.MinPricePerKm = float.Parse(textMinPricePerKm.Text);
+            configuration.MinPricePerKm = float.Parse(textMinPricePerKm.Text, CultureInfo.GetCultureInfo("de-DE"));
             configuration.NumberOfCars = int.Parse(textNumberOfCars.Text);
             configuration.ReservationCheckInterval = int.Parse(textReservationCheckInterval.Text);
             configuration.PhoneNumber = textPhoneNumber.Text;
@@ -127,37 +121,6 @@ namespace ProiectPractica
             configuration.StartBusinessHour = int.Parse(textStartBusinessHour.Text);
             configuration.EndBusinessHour = int.Parse(textEndBusinessHour.Text);
             return configuration;
-        }
-
-        /// <summary>
-        /// Extra validations to test if phone number, start hour, and end hour are in the correct format.
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <exception cref="Exception"></exception>
-        private void ValidateConfiguration(Configuration configuration)
-        {
-            var messages = new List<string>();
-            if (!configuration.PhoneNumber[0].Equals('+'))
-            {
-                messages.Add("A phone number should start with '+'!\n");
-            }
-            if (configuration.StartBusinessHour < 0 || configuration.StartBusinessHour > 24)
-            {
-                messages.Add("Invalid Start hour!\n");
-            }
-            if (configuration.EndBusinessHour < 0 || configuration.EndBusinessHour > 24)
-            {
-                messages.Add("Invalid End hour!\n");
-            }
-            if (configuration.StartBusinessHour >= configuration.EndBusinessHour)
-            {
-                messages.Add("End hour should be greater than Start hour!\n");
-            }
-
-            if (messages.Any())
-            {
-                throw new Exception(string.Join('\n', messages));
-            }
         }
 
         /// <summary>
@@ -173,6 +136,139 @@ namespace ProiectPractica
                 SetValuesInTextBoxes(configuration);
             }
             MakeButtonsUnavailable();
+        }
+
+        private void ValidatingInt(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            if (!ConfigurationValidator.ValidateInt(textBox.Text, out string errorMessage))
+            {
+                e.Cancel = true;
+                errorProviderForConfiguration.SetError(textBox, errorMessage);
+            }
+        }
+
+        private void ValidatedInt(object sender, EventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            errorProviderForConfiguration.SetError(textBox, "");
+        }
+
+        private void TextChangedInt(object sender, EventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            var errorLabel = Controls.Find("errorLabel" + textBox.Name[4..], true).FirstOrDefault() as Label;
+            if (!ConfigurationValidator.ValidateInt(textBox.Text, out string errorMessage))
+            {
+                errorLabel.Text = errorMessage;
+                errorLabel.ForeColor = Color.Red;
+            }
+            else
+            {
+                errorLabel.Text = string.Empty;
+            }
+        }
+
+        private void ValidatingFloat(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            if (!ConfigurationValidator.ValidateFloat(textBox.Text, out string errorMessage))
+            {
+                e.Cancel = true;
+                errorProviderForConfiguration.SetError(textBox, errorMessage);
+            }
+        }
+
+        private void ValidatedFloat(object sender, EventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            errorProviderForConfiguration.SetError(textBox, "");
+        }
+
+        private void TextChangedFloat(object sender, EventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            var errorLabel = Controls.Find("errorLabel" + textBox.Name[4..], true).FirstOrDefault() as Label;
+            if (!ConfigurationValidator.ValidateFloat(textBox.Text, out string errorMessage))
+            {
+                errorLabel.Text = errorMessage;
+                errorLabel.ForeColor = Color.Red;
+            }
+            else
+            {
+                errorLabel.Text = string.Empty;
+            }
+        }
+
+        private void StartBusinessHourValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            string errorMessage;
+            if (!ConfigurationValidator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            {
+                e.Cancel = true;
+                errorProviderForConfiguration.SetError(textStartBusinessHour, errorMessage);
+            }
+        }
+        private void StartBusinessHourValidated(object sender, EventArgs e)
+        {
+            errorProviderForConfiguration.SetError(textStartBusinessHour, "");
+        }
+
+        private void StartBusinessHourTextChanged(object sender, EventArgs e)
+        {
+            var errorMessage = string.Empty;
+            if (!ConfigurationValidator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            {
+                errorLabelStartBusinessHour.Text = errorMessage;
+                errorLabelStartBusinessHour.ForeColor = Color.Red;
+            }
+            else
+            {
+                errorLabelStartBusinessHour.Text = string.Empty;
+            }
+        }
+
+        private void EndBusinessHourValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var errorMessage = string.Empty;
+            if (!ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            {
+                e.Cancel = true;
+                errorProviderForConfiguration.SetError(textEndBusinessHour, errorMessage);
+            }
+        }
+
+        private void EndBusinessHourValidated(object sender, EventArgs e)
+        {
+            errorProviderForConfiguration.SetError(textEndBusinessHour, "");
+        }
+
+        private void EndBusinessHourTextChanged(object sender, EventArgs e)
+        {
+            var errorMessage = string.Empty;
+            if (!ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            {
+                errorLabelEndBusinessHour.Text = errorMessage;
+                errorLabelEndBusinessHour.ForeColor = Color.Red;
+            }
+            else
+            {
+                errorLabelEndBusinessHour.Text = string.Empty;
+            }
+        }
+
+        private bool CheckEndHourGreaterThanStartHour(out string errorMessage)
+        {
+            if(ConfigurationValidator.ValidateHour(textStartBusinessHour.Text,out errorMessage) && ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage))
+            {
+                if (int.Parse(textEndBusinessHour.Text) <= int.Parse(textStartBusinessHour.Text))
+                {
+                    errorMessage = "End hour should be greater than Start hour!";
+                    return false;
+                }
+            }
+            errorMessage = string.Empty;
+            return true;
         }
     }
 }

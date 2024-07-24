@@ -50,6 +50,16 @@
             buttonSave = new Button();
             buttonReset = new Button();
             toolTipForConfigurationJson = new ToolTip(components);
+            errorProviderForConfiguration = new ErrorProvider(components);
+            errorLabelMinAcceptablePrice = new Label();
+            errorLabelMinPricePerKm = new Label();
+            errorLabelNumberOfCars = new Label();
+            errorLabelReservationCheckInterval = new Label();
+            errorLabelPhoneNumber = new Label();
+            errorLabelMinPriceForShortTrips = new Label();
+            errorLabelShortTripDistanceThreshold = new Label();
+            errorLabelStartBusinessHour = new Label();
+            errorLabelEndBusinessHour = new Label();
             SuspendLayout();
             // 
             // minAcceptablePrice
@@ -148,7 +158,10 @@
             textMinAcceptablePrice.Name = "textMinAcceptablePrice";
             textMinAcceptablePrice.Size = new Size(250, 47);
             textMinAcceptablePrice.TabIndex = 9;
+            textMinAcceptablePrice.TextChanged += TextChangedInt;
             textMinAcceptablePrice.TextChanged += EnableButtonsWhenTextChanged;
+            textMinAcceptablePrice.Validating += ValidatingInt;
+            textMinAcceptablePrice.Validated += ValidatedInt;
             // 
             // textMinPricePerKm
             // 
@@ -157,6 +170,9 @@
             textMinPricePerKm.Size = new Size(250, 47);
             textMinPricePerKm.TabIndex = 10;
             textMinPricePerKm.TextChanged += EnableButtonsWhenTextChanged;
+            textMinPricePerKm.TextChanged += TextChangedFloat;
+            textMinPricePerKm.Validating += ValidatingFloat;
+            textMinPricePerKm.Validated += ValidatedFloat;
             // 
             // textNumberOfCars
             // 
@@ -165,6 +181,9 @@
             textNumberOfCars.Size = new Size(250, 47);
             textNumberOfCars.TabIndex = 11;
             textNumberOfCars.TextChanged += EnableButtonsWhenTextChanged;
+            textNumberOfCars.TextChanged += TextChangedInt;
+            textNumberOfCars.Validated += ValidatedInt;
+            textNumberOfCars.Validating += ValidatingInt;
             // 
             // textReservationCheckInterval
             // 
@@ -173,6 +192,9 @@
             textReservationCheckInterval.Size = new Size(250, 47);
             textReservationCheckInterval.TabIndex = 12;
             textReservationCheckInterval.TextChanged += EnableButtonsWhenTextChanged;
+            textReservationCheckInterval.TextChanged += TextChangedInt;
+            textReservationCheckInterval.Validated += ValidatedInt;
+            textReservationCheckInterval.Validating += ValidatingInt;
             // 
             // textPhoneNumber
             // 
@@ -189,6 +211,9 @@
             textMinPriceForShortTrips.Size = new Size(250, 47);
             textMinPriceForShortTrips.TabIndex = 14;
             textMinPriceForShortTrips.TextChanged += EnableButtonsWhenTextChanged;
+            textMinPriceForShortTrips.TextChanged += TextChangedInt;
+            textMinPriceForShortTrips.Validated += ValidatedInt;
+            textMinPriceForShortTrips.Validating += ValidatingInt;
             // 
             // textShortTripDistanceThreshold
             // 
@@ -197,6 +222,9 @@
             textShortTripDistanceThreshold.Size = new Size(250, 47);
             textShortTripDistanceThreshold.TabIndex = 15;
             textShortTripDistanceThreshold.TextChanged += EnableButtonsWhenTextChanged;
+            textShortTripDistanceThreshold.TextChanged += TextChangedInt;
+            textShortTripDistanceThreshold.Validated += ValidatedInt;
+            textShortTripDistanceThreshold.Validating += ValidatingInt;
             // 
             // textStartBusinessHour
             // 
@@ -205,6 +233,10 @@
             textStartBusinessHour.Size = new Size(250, 47);
             textStartBusinessHour.TabIndex = 16;
             textStartBusinessHour.TextChanged += EnableButtonsWhenTextChanged;
+            textStartBusinessHour.TextChanged += StartBusinessHourTextChanged;
+            textStartBusinessHour.TextChanged += EndBusinessHourTextChanged;
+            textStartBusinessHour.Validated += StartBusinessHourValidated;
+            textStartBusinessHour.Validating += StartBusinessHourValidating;
             // 
             // textEndBusinessHour
             // 
@@ -213,10 +245,14 @@
             textEndBusinessHour.Size = new Size(250, 47);
             textEndBusinessHour.TabIndex = 17;
             textEndBusinessHour.TextChanged += EnableButtonsWhenTextChanged;
+            textEndBusinessHour.TextChanged += EndBusinessHourTextChanged;
+            textEndBusinessHour.TextChanged += StartBusinessHourTextChanged;
+            textEndBusinessHour.Validated += EndBusinessHourValidated;
+            textEndBusinessHour.Validating += EndBusinessHourValidating;
             // 
             // buttonSave
             // 
-            buttonSave.Location = new Point(1029, 600);
+            buttonSave.Location = new Point(1031, 634);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(218, 110);
             buttonSave.TabIndex = 18;
@@ -226,7 +262,7 @@
             // 
             // buttonReset
             // 
-            buttonReset.Location = new Point(1419, 600);
+            buttonReset.Location = new Point(1424, 634);
             buttonReset.Name = "buttonReset";
             buttonReset.Size = new Size(218, 110);
             buttonReset.TabIndex = 19;
@@ -234,11 +270,97 @@
             buttonReset.UseVisualStyleBackColor = true;
             buttonReset.Click += buttonReset_Click;
             // 
+            // errorProviderForConfiguration
+            // 
+            errorProviderForConfiguration.ContainerControl = this;
+            // 
+            // errorLabelMinAcceptablePrice
+            // 
+            errorLabelMinAcceptablePrice.AutoSize = true;
+            errorLabelMinAcceptablePrice.Location = new Point(450, 181);
+            errorLabelMinAcceptablePrice.Name = "errorLabelMinAcceptablePrice";
+            errorLabelMinAcceptablePrice.Size = new Size(0, 41);
+            errorLabelMinAcceptablePrice.TabIndex = 20;
+            // 
+            // errorLabelMinPricePerKm
+            // 
+            errorLabelMinPricePerKm.AutoSize = true;
+            errorLabelMinPricePerKm.Location = new Point(450, 303);
+            errorLabelMinPricePerKm.Name = "errorLabelMinPricePerKm";
+            errorLabelMinPricePerKm.Size = new Size(0, 41);
+            errorLabelMinPricePerKm.TabIndex = 21;
+            // 
+            // errorLabelNumberOfCars
+            // 
+            errorLabelNumberOfCars.AutoSize = true;
+            errorLabelNumberOfCars.Location = new Point(450, 415);
+            errorLabelNumberOfCars.Name = "errorLabelNumberOfCars";
+            errorLabelNumberOfCars.Size = new Size(0, 41);
+            errorLabelNumberOfCars.TabIndex = 22;
+            // 
+            // errorLabelReservationCheckInterval
+            // 
+            errorLabelReservationCheckInterval.AutoSize = true;
+            errorLabelReservationCheckInterval.Location = new Point(450, 544);
+            errorLabelReservationCheckInterval.Name = "errorLabelReservationCheckInterval";
+            errorLabelReservationCheckInterval.Size = new Size(0, 41);
+            errorLabelReservationCheckInterval.TabIndex = 23;
+            // 
+            // errorLabelPhoneNumber
+            // 
+            errorLabelPhoneNumber.AutoSize = true;
+            errorLabelPhoneNumber.Location = new Point(450, 669);
+            errorLabelPhoneNumber.Name = "errorLabelPhoneNumber";
+            errorLabelPhoneNumber.Size = new Size(0, 41);
+            errorLabelPhoneNumber.TabIndex = 24;
+            // 
+            // errorLabelMinPriceForShortTrips
+            // 
+            errorLabelMinPriceForShortTrips.AutoSize = true;
+            errorLabelMinPriceForShortTrips.Location = new Point(1350, 181);
+            errorLabelMinPriceForShortTrips.Name = "errorLabelMinPriceForShortTrips";
+            errorLabelMinPriceForShortTrips.Size = new Size(0, 41);
+            errorLabelMinPriceForShortTrips.TabIndex = 25;
+            // 
+            // errorLabelShortTripDistanceThreshold
+            // 
+            errorLabelShortTripDistanceThreshold.AutoSize = true;
+            errorLabelShortTripDistanceThreshold.Location = new Point(1350, 303);
+            errorLabelShortTripDistanceThreshold.Name = "errorLabelShortTripDistanceThreshold";
+            errorLabelShortTripDistanceThreshold.Size = new Size(0, 41);
+            errorLabelShortTripDistanceThreshold.TabIndex = 26;
+            // 
+            // errorLabelStartBusinessHour
+            // 
+            errorLabelStartBusinessHour.AutoSize = true;
+            errorLabelStartBusinessHour.Location = new Point(1350, 415);
+            errorLabelStartBusinessHour.Name = "errorLabelStartBusinessHour";
+            errorLabelStartBusinessHour.Size = new Size(0, 41);
+            errorLabelStartBusinessHour.TabIndex = 27;
+            // 
+            // errorLabelEndBusinessHour
+            // 
+            errorLabelEndBusinessHour.AutoSize = true;
+            errorLabelEndBusinessHour.Location = new Point(1350, 544);
+            errorLabelEndBusinessHour.Name = "errorLabelEndBusinessHour";
+            errorLabelEndBusinessHour.Size = new Size(0, 41);
+            errorLabelEndBusinessHour.TabIndex = 28;
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1863, 785);
+            AutoValidate = AutoValidate.EnableAllowFocusChange;
+            ClientSize = new Size(1942, 852);
+            Controls.Add(errorLabelEndBusinessHour);
+            Controls.Add(errorLabelStartBusinessHour);
+            Controls.Add(errorLabelShortTripDistanceThreshold);
+            Controls.Add(errorLabelMinPriceForShortTrips);
+            Controls.Add(errorLabelPhoneNumber);
+            Controls.Add(errorLabelReservationCheckInterval);
+            Controls.Add(errorLabelNumberOfCars);
+            Controls.Add(errorLabelMinPricePerKm);
+            Controls.Add(errorLabelMinAcceptablePrice);
             Controls.Add(buttonReset);
             Controls.Add(buttonSave);
             Controls.Add(textEndBusinessHour);
@@ -262,6 +384,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "ConfigForm";
             Text = "Configurator";
+            ((System.ComponentModel.ISupportInitialize)errorProviderForConfiguration).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -289,5 +412,15 @@
         private Button buttonSave;
         private Button buttonReset;
         private ToolTip toolTipForConfigurationJson;
+        private ErrorProvider errorProviderForConfiguration;
+        private Label errorLabelEndBusinessHour;
+        private Label errorLabelStartBusinessHour;
+        private Label errorLabelShortTripDistanceThreshold;
+        private Label errorLabelMinPriceForShortTrips;
+        private Label errorLabelPhoneNumber;
+        private Label errorLabelReservationCheckInterval;
+        private Label errorLabelNumberOfCars;
+        private Label errorLabelMinPricePerKm;
+        private Label errorLabelMinAcceptablePrice;
     }
 }
