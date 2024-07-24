@@ -18,10 +18,8 @@ namespace ProiectPractica
             // see https://aka.ms/applicationconfiguration.
             var filePath = ConfigurationManager.AppSettings["filePath"];
             var configurationRepository = new ConfigurationRepository(filePath);
-            var configurationValidator = new ConfigurationValidator();
             ApplicationConfiguration.Initialize();
             var config = new ConfigForm();
-            config.SetValidator(configurationValidator);
             config.SetRepository(configurationRepository);
             Application.Run(config);
         }

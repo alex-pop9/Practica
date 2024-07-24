@@ -8,7 +8,6 @@ namespace ProiectPractica
     public partial class ConfigForm : Form
     {
         private ConfigurationRepository _repository;
-        private ConfigurationValidator _validator;
         public ConfigForm()
         {
             InitializeComponent();
@@ -33,11 +32,6 @@ namespace ProiectPractica
                 MakeTextBoxesUnavailable();
             }
             MakeButtonsUnavailable();
-        }
-
-        public void SetValidator(ConfigurationValidator configurationValidator)
-        {
-            _validator = configurationValidator;
         }
 
         /// <summary>
@@ -147,7 +141,7 @@ namespace ProiectPractica
         private void ValidatingInt(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var textBox = (TextBox)sender;
-            if (!_validator.ValidateInt(textBox.Text, out string errorMessage))
+            if (!ConfigurationValidator.ValidateInt(textBox.Text, out string errorMessage))
             {
                 e.Cancel = true;
                 errorProviderForConfiguration.SetError(textBox, errorMessage);
@@ -164,7 +158,7 @@ namespace ProiectPractica
         {
             var textBox = (TextBox)sender;
             var errorLabel = Controls.Find("errorLabel" + textBox.Name[4..], true).FirstOrDefault() as Label;
-            if (!_validator.ValidateInt(textBox.Text, out string errorMessage))
+            if (!ConfigurationValidator.ValidateInt(textBox.Text, out string errorMessage))
             {
                 errorLabel.Text = errorMessage;
                 errorLabel.ForeColor = Color.Red;
@@ -178,7 +172,7 @@ namespace ProiectPractica
         private void ValidatingFloat(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var textBox = (TextBox)sender;
-            if (!_validator.ValidateFloat(textBox.Text, out string errorMessage))
+            if (!ConfigurationValidator.ValidateFloat(textBox.Text, out string errorMessage))
             {
                 e.Cancel = true;
                 errorProviderForConfiguration.SetError(textBox, errorMessage);
@@ -195,7 +189,7 @@ namespace ProiectPractica
         {
             var textBox = (TextBox)sender;
             var errorLabel = Controls.Find("errorLabel" + textBox.Name[4..], true).FirstOrDefault() as Label;
-            if (!_validator.ValidateFloat(textBox.Text, out string errorMessage))
+            if (!ConfigurationValidator.ValidateFloat(textBox.Text, out string errorMessage))
             {
                 errorLabel.Text = errorMessage;
                 errorLabel.ForeColor = Color.Red;
@@ -209,7 +203,7 @@ namespace ProiectPractica
         private void StartBusinessHourValidating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             string errorMessage;
-            if (!_validator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            if (!ConfigurationValidator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 e.Cancel = true;
                 errorProviderForConfiguration.SetError(textStartBusinessHour, errorMessage);
@@ -223,7 +217,7 @@ namespace ProiectPractica
         private void StartBusinessHourTextChanged(object sender, EventArgs e)
         {
             var errorMessage = string.Empty;
-            if (!_validator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            if (!ConfigurationValidator.ValidateHour(textStartBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 errorLabelStartBusinessHour.Text = errorMessage;
                 errorLabelStartBusinessHour.ForeColor = Color.Red;
@@ -237,7 +231,7 @@ namespace ProiectPractica
         private void EndBusinessHourValidating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var errorMessage = string.Empty;
-            if (!_validator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            if (!ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 e.Cancel = true;
                 errorProviderForConfiguration.SetError(textEndBusinessHour, errorMessage);
@@ -252,7 +246,7 @@ namespace ProiectPractica
         private void EndBusinessHourTextChanged(object sender, EventArgs e)
         {
             var errorMessage = string.Empty;
-            if (!_validator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
+            if (!ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage) || !CheckEndHourGreaterThanStartHour(out errorMessage))
             {
                 errorLabelEndBusinessHour.Text = errorMessage;
                 errorLabelEndBusinessHour.ForeColor = Color.Red;
@@ -265,7 +259,7 @@ namespace ProiectPractica
 
         private bool CheckEndHourGreaterThanStartHour(out string errorMessage)
         {
-            if(_validator.ValidateHour(textStartBusinessHour.Text,out errorMessage) && _validator.ValidateHour(textEndBusinessHour.Text, out errorMessage))
+            if(ConfigurationValidator.ValidateHour(textStartBusinessHour.Text,out errorMessage) && ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage))
             {
                 if (int.Parse(textEndBusinessHour.Text) <= int.Parse(textStartBusinessHour.Text))
                 {

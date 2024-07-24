@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProiectPractica.Validator
 {
-    public class ConfigurationValidator
+    public static class ConfigurationValidator
     {
         /// <summary>
         /// Validates a string so that it can be parsed into an integer.
@@ -18,7 +18,7 @@ namespace ProiectPractica.Validator
         /// <param name="textToBeValidated"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        public bool ValidateInt(string textToBeValidated, out string errorMessage)
+        public static bool ValidateInt(string textToBeValidated, out string errorMessage)
         {
             if (textToBeValidated.Length == 0)
             {
@@ -57,41 +57,42 @@ namespace ProiectPractica.Validator
         /// <param name="textToBeValidated"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        public bool ValidateFloat(string textToBeValidated, out string errorMessage)
+        public static bool ValidateFloat(string textToBeValidated, out string errorMessage)
         {
             if (textToBeValidated.Length == 0)
             {
                 errorMessage = "Field should not be empty!";
                 return false;
             }
-            if(float.TryParse(textToBeValidated, CultureInfo.CreateSpecificCulture("de-DE"), out float number))
+            if(!float.TryParse(textToBeValidated, CultureInfo.CreateSpecificCulture("de-DE"), out float number))
             {
-                if (number < 0)
-                {
-                    errorMessage = "The number should be positive!";
-                    return false;
-                }
-                if (textToBeValidated.Contains('.'))
-                {
-                    errorMessage = "The number is not in correct format!";
-                    return false;
-                }
-                if (number > float.MaxValue)
-                {
-                    errorMessage = "The number is too big";
-                    return false;
-                }
-                // after 7 decimals it will approximate the number, whitch can impact the configuration saved in the file
-                if(textToBeValidated.Contains(',') && textToBeValidated.Substring(textToBeValidated.IndexOf(',')).Length > 7)
-                {
-                    errorMessage = "Too many decimals!";
-                    return false;
-                }
-                errorMessage = "";
-                return true;
+                errorMessage = "The number is not in correct format!";
+                return false;
             }
-            errorMessage = "The number is not in correct format!";
-            return false;
+            if (number < 0)
+            {
+                errorMessage = "The number should be positive!";
+                return false;
+            }
+            if (textToBeValidated.Contains('.'))
+            {
+                errorMessage = "The number is not in correct format!";
+                return false;
+            }
+            if (number > float.MaxValue)
+            {
+                errorMessage = "The number is too big";
+                return false;
+            }
+            // after 7 decimals it will approximate the number, whitch can impact the configuration saved in the file
+            if (textToBeValidated.Contains(',') && textToBeValidated.Substring(textToBeValidated.IndexOf(',')).Length > 7)
+            {
+                errorMessage = "Too many decimals!";
+                return false;
+            }
+            errorMessage = "";
+            return true;
+
         }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace ProiectPractica.Validator
         /// <param name="textToBeValidated"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        public bool ValidateHour(string textToBeValidated, out string errorMessage)
+        public static bool ValidateHour(string textToBeValidated, out string errorMessage)
         {
             if (textToBeValidated.Length == 0)
             {
