@@ -277,7 +277,7 @@
             // errorLabelMinAcceptablePrice
             // 
             errorLabelMinAcceptablePrice.AutoSize = true;
-            errorLabelMinAcceptablePrice.Location = new Point(500, 181);
+            errorLabelMinAcceptablePrice.Location = new Point(450, 181);
             errorLabelMinAcceptablePrice.Name = "errorLabelMinAcceptablePrice";
             errorLabelMinAcceptablePrice.Size = new Size(0, 41);
             errorLabelMinAcceptablePrice.TabIndex = 20;
@@ -285,7 +285,7 @@
             // errorLabelMinPricePerKm
             // 
             errorLabelMinPricePerKm.AutoSize = true;
-            errorLabelMinPricePerKm.Location = new Point(500, 303);
+            errorLabelMinPricePerKm.Location = new Point(450, 303);
             errorLabelMinPricePerKm.Name = "errorLabelMinPricePerKm";
             errorLabelMinPricePerKm.Size = new Size(0, 41);
             errorLabelMinPricePerKm.TabIndex = 21;
@@ -293,7 +293,7 @@
             // errorLabelNumberOfCars
             // 
             errorLabelNumberOfCars.AutoSize = true;
-            errorLabelNumberOfCars.Location = new Point(500, 415);
+            errorLabelNumberOfCars.Location = new Point(450, 415);
             errorLabelNumberOfCars.Name = "errorLabelNumberOfCars";
             errorLabelNumberOfCars.Size = new Size(0, 41);
             errorLabelNumberOfCars.TabIndex = 22;
@@ -301,7 +301,7 @@
             // errorLabelReservationCheckInterval
             // 
             errorLabelReservationCheckInterval.AutoSize = true;
-            errorLabelReservationCheckInterval.Location = new Point(500, 544);
+            errorLabelReservationCheckInterval.Location = new Point(450, 544);
             errorLabelReservationCheckInterval.Name = "errorLabelReservationCheckInterval";
             errorLabelReservationCheckInterval.Size = new Size(0, 41);
             errorLabelReservationCheckInterval.TabIndex = 23;
@@ -309,7 +309,7 @@
             // errorLabelPhoneNumber
             // 
             errorLabelPhoneNumber.AutoSize = true;
-            errorLabelPhoneNumber.Location = new Point(500, 669);
+            errorLabelPhoneNumber.Location = new Point(450, 669);
             errorLabelPhoneNumber.Name = "errorLabelPhoneNumber";
             errorLabelPhoneNumber.Size = new Size(0, 41);
             errorLabelPhoneNumber.TabIndex = 24;
@@ -317,7 +317,7 @@
             // errorLabelMinPriceForShortTrips
             // 
             errorLabelMinPriceForShortTrips.AutoSize = true;
-            errorLabelMinPriceForShortTrips.Location = new Point(1400, 181);
+            errorLabelMinPriceForShortTrips.Location = new Point(1350, 181);
             errorLabelMinPriceForShortTrips.Name = "errorLabelMinPriceForShortTrips";
             errorLabelMinPriceForShortTrips.Size = new Size(0, 41);
             errorLabelMinPriceForShortTrips.TabIndex = 25;
@@ -325,7 +325,7 @@
             // errorLabelShortTripDistanceThreshold
             // 
             errorLabelShortTripDistanceThreshold.AutoSize = true;
-            errorLabelShortTripDistanceThreshold.Location = new Point(1400, 303);
+            errorLabelShortTripDistanceThreshold.Location = new Point(1350, 303);
             errorLabelShortTripDistanceThreshold.Name = "errorLabelShortTripDistanceThreshold";
             errorLabelShortTripDistanceThreshold.Size = new Size(0, 41);
             errorLabelShortTripDistanceThreshold.TabIndex = 26;
