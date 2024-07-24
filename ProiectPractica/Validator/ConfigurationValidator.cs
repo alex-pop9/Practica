@@ -25,28 +25,18 @@ namespace ProiectPractica.Validator
                 errorMessage = "Field should not be empty!";
                 return false;
             }
-            if (int.TryParse(textToBeValidated, out int integer))
+            if (!int.TryParse(textToBeValidated, out int integer))
             {
-                if (integer < 0)
-                {
-                    errorMessage = "The number should be positive!";
-                    return false;
-                }
-                errorMessage = "";
-                return true;
-            }
-            else if ((!textToBeValidated.Substring(1).All(char.IsDigit) && textToBeValidated[0] != '-') || !textToBeValidated.All(char.IsDigit))
-            {
-                errorMessage = "This should be an integer!";
+                errorMessage = "Cannot parse the given text into an integer!";
                 return false;
             }
-            else if (textToBeValidated.Substring(1).All(char.IsDigit) && textToBeValidated[0] == '-' && textToBeValidated.Length > 1)
+            if (integer < 0)
             {
                 errorMessage = "The number should be positive!";
                 return false;
             }
-            errorMessage = "The number is too big!";
-            return false;
+            errorMessage = "";
+            return true;    
         }
 
         /// <summary>
@@ -64,7 +54,7 @@ namespace ProiectPractica.Validator
                 errorMessage = "Field should not be empty!";
                 return false;
             }
-            if(!float.TryParse(textToBeValidated, CultureInfo.CreateSpecificCulture("de-DE"), out float number))
+            if(!float.TryParse(textToBeValidated, CultureInfo.GetCultureInfo("de-DE"), out float number))
             {
                 errorMessage = "The number is not in correct format!";
                 return false;
@@ -92,7 +82,6 @@ namespace ProiectPractica.Validator
             }
             errorMessage = "";
             return true;
-
         }
 
         /// <summary>
@@ -111,24 +100,19 @@ namespace ProiectPractica.Validator
                 errorMessage = "Field should not be empty!";
                 return false;
             }
-            if (int.TryParse(textToBeValidated, out int hour))
+            if (!int.TryParse(textToBeValidated, out int hour))
             {
-                // -0 passed the validation, so this: textToBeValidated[0] == '-', assures that -0 will not pass the validation
-                if (hour < 0 || hour > 23 || textToBeValidated[0] == '-')
-                {
-                    errorMessage = "Invalid hour!";
-                    return false;
-                }
-                errorMessage = "";
-                return true;
+                errorMessage = "Invalid hour!";
+                return false;                
             }
-            else if ((!textToBeValidated.Substring(1).All(char.IsDigit) && textToBeValidated[0] != '-') || !textToBeValidated.All(char.IsDigit))
+            // -0 passed the validation, so this: textToBeValidated[0] == '-', assures that -0 will not pass the validation
+            if (hour < 0 || hour > 23 || textToBeValidated[0] == '-')
             {
-                errorMessage = "This should be an integer!";
+                errorMessage = "Invalid hour!";
                 return false;
             }
-            errorMessage = "Invalid hour!";
-            return false;
+            errorMessage = "";
+            return true;
         }
     }
 }

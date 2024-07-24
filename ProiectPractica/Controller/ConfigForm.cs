@@ -112,7 +112,7 @@ namespace ProiectPractica
         {
             var configuration = new Configuration();
             configuration.MinAcceptablePrice = int.Parse(textMinAcceptablePrice.Text);
-            configuration.MinPricePerKm = float.Parse(textMinPricePerKm.Text, CultureInfo.CreateSpecificCulture("de-DE"));
+            configuration.MinPricePerKm = float.Parse(textMinPricePerKm.Text, CultureInfo.GetCultureInfo("de-DE"));
             configuration.NumberOfCars = int.Parse(textNumberOfCars.Text);
             configuration.ReservationCheckInterval = int.Parse(textReservationCheckInterval.Text);
             configuration.PhoneNumber = textPhoneNumber.Text;
