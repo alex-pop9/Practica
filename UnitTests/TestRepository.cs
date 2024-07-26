@@ -1,5 +1,7 @@
 using ProiectPractica.Repository;
 using ProiectPractica.Model;
+using ProiectPractica.SettingsHandler;
+using ProiectPractica.Validator;
 using System.IO;
 using System.Reflection;
 using Mono.Cecil;

@@ -328,11 +328,12 @@ namespace ProiectPractica
         /// <param name="e"></param>
         private void buttonFileSelect_Click(object sender, EventArgs e)
         {
+            if (CheckUnsavedData()) return;
             var fileContent = string.Empty;
             var filePath = string.Empty;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                string userName = Environment.UserName;
+                var userName = Environment.UserName;
                 openFileDialog.InitialDirectory = "c:\\Users\\" + userName;
                 openFileDialog.Filter = "json files (*.json)|*.json";
                 openFileDialog.RestoreDirectory = true;
@@ -350,6 +351,24 @@ namespace ProiectPractica
                     SetConfigurationInTextBoxes();
                 }
             }
+        }
+
+        /// <summary>
+        /// Return true if there is unsaved data
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckUnsavedData()
+        {
+            // when you have uncommited data it shows a warning message
+            if (buttonReset.Enabled == true)
+            {
+                var result = MessageBox.Show("You have unsaved data!\nDo you wish to contiune?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
