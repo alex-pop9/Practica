@@ -61,7 +61,7 @@
             errorLabelStartBusinessHour = new Label();
             errorLabelEndBusinessHour = new Label();
             buttonFileSelect = new Button();
-            openFileDialog1 = new OpenFileDialog();
+            openConfigurationFileDialog = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)errorProviderForConfiguration).BeginInit();
             SuspendLayout();
             // 
@@ -324,9 +324,9 @@
             buttonFileSelect.UseVisualStyleBackColor = true;
             buttonFileSelect.Click += buttonFileSelect_Click;
             // 
-            // openFileDialog1
+            // openConfigurationFileDialog
             // 
-            openFileDialog1.FileName = "openFileDialog1";
+            openConfigurationFileDialog.FileName = "openFileDialog1";
             // 
             // ConfigForm
             // 
@@ -406,6 +406,6 @@
         private Label errorLabelMinPricePerKm;
         private Label errorLabelMinAcceptablePrice;
         private Button buttonFileSelect;
-        private OpenFileDialog openFileDialog1;
+        private OpenFileDialog openConfigurationFileDialog;
     }
 }

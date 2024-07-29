@@ -120,7 +120,7 @@ namespace ProiectPractica
         }
 
         /// <summary>
-        /// Enables the Reset button at change text and Save button if all validations are passed at text change.
+        /// Enables or disables the buttons 
         /// I got the idea from here: https://stackoverflow.com/a/12460227
         /// </summary>
         /// <param name="sender"></param>
@@ -130,12 +130,29 @@ namespace ProiectPractica
             if (!ValidateChildren())
             {
                 buttonSave.Enabled = false;
+                buttonReset.Enabled = true;
             }
             else
             {
+                EnableResetButton();
+            }
+        }
+
+        /// <summary>
+        /// If the configuratio from the file is the same as the one from text boxes it disables the buttons
+        /// </summary>
+        private void EnableResetButton()
+        {
+            if (!GetConfigurationFromTextBox().Equals(_repository.GetConfigurationFromFile()))
+            {
+                buttonReset.Enabled = true;
                 buttonSave.Enabled = true;
             }
-            buttonReset.Enabled = true;
+            else
+            {
+                buttonReset.Enabled = false;
+                buttonSave.Enabled = false;
+            }
         }
 
         /// <summary>
