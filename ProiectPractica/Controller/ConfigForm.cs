@@ -2,36 +2,98 @@ using ProiectPractica.Model;
 using ProiectPractica.Repository;
 using System.Globalization;
 using ProiectPractica.Validator;
+using ProiectPractica.SettingsHandler;
 
 namespace ProiectPractica
 {
     public partial class ConfigForm : Form
     {
         private ConfigurationRepository _repository;
+        private FileSettingsHandler _fileSettingsHandler;
         public ConfigForm()
         {
             InitializeComponent();
         }
 
-        /// <summary>
-        /// This function sets the repository, takes the configuration from the file, and puts the object values into text boxes.
-        /// If there is an error it shows a Message box and unables all text boxes.
-        /// </summary>
-        /// <param name="configurationRepository">Injected repository</param>
+        public void SetFileSettingsHandler(FileSettingsHandler fileSettingsHandler)
+        {
+            _fileSettingsHandler = fileSettingsHandler;
+        }
+
         public void SetRepository(ConfigurationRepository configurationRepository)
         {
             _repository = configurationRepository;
+            SetConfigurationInTextBoxes();
+            SetValidation();
+        }
+        
+        /// <summary>
+        /// Reads the configuration from the file and puts the configuration values in text boxes
+        /// </summary>
+        private void SetConfigurationInTextBoxes()
+        {
+            var filePath = _fileSettingsHandler.GetFileSettings().FilePath;
+            _repository.FilePath = filePath;
             var configurationFromRepo = _repository.GetConfigurationFromFile();
             if (configurationFromRepo != null)
             {
                 SetValuesInTextBoxes(configurationFromRepo);
             }
             else
-            {     
-                MessageBox.Show("Error loading the Configuration from the file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                MakeTextBoxesUnavailable();
+            {
+                MessageBox.Show("Error loading the Configuration from the file, please select a file from the explorer!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             MakeButtonsUnavailable();
+        }
+
+        /// <summary>
+        /// This sets the validation for text boxes
+        /// </summary>
+        private void SetValidation()
+        {
+            textMinAcceptablePrice.TextChanged += EnableButtonsWhenTextChanged;
+            textMinAcceptablePrice.TextChanged += TextChangedInt;
+            textMinAcceptablePrice.Validating += ValidatingInt;
+            textMinAcceptablePrice.Validated += ValidatedInt;
+
+            textMinPricePerKm.TextChanged += TextChangedFloat;
+            textMinPricePerKm.TextChanged += EnableButtonsWhenTextChanged;
+            textMinPricePerKm.Validating += ValidatingFloat;
+            textMinPricePerKm.Validated += ValidatedFloat;
+
+            textNumberOfCars.TextChanged += TextChangedInt;
+            textNumberOfCars.TextChanged += EnableButtonsWhenTextChanged;
+            textNumberOfCars.Validating += ValidatingInt;
+            textNumberOfCars.Validated += ValidatedInt;
+
+            textReservationCheckInterval.TextChanged += TextChangedInt;
+            textReservationCheckInterval.TextChanged += EnableButtonsWhenTextChanged;
+            textReservationCheckInterval.Validating += ValidatingInt;
+            textReservationCheckInterval.Validated += ValidatedInt;
+
+            textPhoneNumber.TextChanged += EnableButtonsWhenTextChanged;
+
+            textMinPriceForShortTrips.TextChanged += TextChangedInt;
+            textMinPriceForShortTrips.TextChanged += EnableButtonsWhenTextChanged;
+            textMinPriceForShortTrips.Validating += ValidatingInt;
+            textMinPriceForShortTrips.Validated += ValidatedInt;
+
+            textShortTripDistanceThreshold.TextChanged += TextChangedInt;
+            textShortTripDistanceThreshold.TextChanged += EnableButtonsWhenTextChanged;
+            textShortTripDistanceThreshold.Validating += ValidatingInt;
+            textShortTripDistanceThreshold.Validated += ValidatedInt;
+
+            textStartBusinessHour.TextChanged += EndBusinessHourTextChanged;
+            textStartBusinessHour.TextChanged += StartBusinessHourTextChanged;
+            textStartBusinessHour.TextChanged += EnableButtonsWhenTextChanged;
+            textStartBusinessHour.Validating += StartBusinessHourValidating;
+            textStartBusinessHour.Validated += StartBusinessHourValidated;
+
+            textEndBusinessHour.TextChanged += StartBusinessHourTextChanged;
+            textEndBusinessHour.TextChanged += EndBusinessHourTextChanged;
+            textEndBusinessHour.TextChanged += EnableButtonsWhenTextChanged;
+            textEndBusinessHour.Validating += EndBusinessHourValidating;
+            textEndBusinessHour.Validated += EndBusinessHourValidated;
         }
 
         /// <summary>
@@ -41,7 +103,7 @@ namespace ProiectPractica
         private void SetValuesInTextBoxes(Configuration configuration)
         {
             textMinAcceptablePrice.Text = configuration.MinAcceptablePrice.ToString();
-            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString(CultureInfo.CreateSpecificCulture("de-DE"));
+            textMinPricePerKm.Text = configuration.MinPricePerKm.ToString(CultureInfo.GetCultureInfo("de-DE"));
             textNumberOfCars.Text = configuration.NumberOfCars.ToString();
             textReservationCheckInterval.Text = configuration.ReservationCheckInterval.ToString();
             textPhoneNumber.Text = configuration.PhoneNumber;
@@ -57,21 +119,8 @@ namespace ProiectPractica
             buttonSave.Enabled = false;
         }
 
-        private void MakeTextBoxesUnavailable()
-        {
-            textMinAcceptablePrice.Enabled = false;
-            textMinPricePerKm.Enabled = false;
-            textNumberOfCars.Enabled = false;
-            textReservationCheckInterval.Enabled = false;
-            textPhoneNumber.Enabled = false;
-            textMinPriceForShortTrips.Enabled = false;
-            textShortTripDistanceThreshold.Enabled = false;
-            textStartBusinessHour.Enabled = false;
-            textEndBusinessHour.Enabled = false;
-        }
-
         /// <summary>
-        /// Enables the Reset button at change text and Save button if all validations are passed at text change.
+        /// Enables or disables the buttons 
         /// I got the idea from here: https://stackoverflow.com/a/12460227
         /// </summary>
         /// <param name="sender"></param>
@@ -81,12 +130,29 @@ namespace ProiectPractica
             if (!ValidateChildren())
             {
                 buttonSave.Enabled = false;
+                buttonReset.Enabled = true;
             }
             else
             {
+                EnableResetButton();
+            }
+        }
+
+        /// <summary>
+        /// If the configuratio from the file is the same as the one from text boxes it disables the buttons
+        /// </summary>
+        private void EnableResetButton()
+        {
+            if (!GetConfigurationFromTextBox().Equals(_repository.GetConfigurationFromFile()))
+            {
+                buttonReset.Enabled = true;
                 buttonSave.Enabled = true;
             }
-            buttonReset.Enabled = true;
+            else
+            {
+                buttonReset.Enabled = false;
+                buttonSave.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -209,6 +275,7 @@ namespace ProiectPractica
                 errorProviderForConfiguration.SetError(textStartBusinessHour, errorMessage);
             }
         }
+
         private void StartBusinessHourValidated(object sender, EventArgs e)
         {
             errorProviderForConfiguration.SetError(textStartBusinessHour, "");
@@ -259,7 +326,7 @@ namespace ProiectPractica
 
         private bool CheckEndHourGreaterThanStartHour(out string errorMessage)
         {
-            if(ConfigurationValidator.ValidateHour(textStartBusinessHour.Text,out errorMessage) && ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage))
+            if (ConfigurationValidator.ValidateHour(textStartBusinessHour.Text, out errorMessage) && ConfigurationValidator.ValidateHour(textEndBusinessHour.Text, out errorMessage))
             {
                 if (int.Parse(textEndBusinessHour.Text) <= int.Parse(textStartBusinessHour.Text))
                 {
@@ -269,6 +336,56 @@ namespace ProiectPractica
             }
             errorMessage = string.Empty;
             return true;
+        }
+
+        /// <summary>
+        /// Handles the selection of files from the explorer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonFileSelect_Click(object sender, EventArgs e)
+        {
+            if (CheckUnsavedData()) return;
+            var fileContent = string.Empty;
+            var filePath = string.Empty;
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                var userName = Environment.UserName;
+                openFileDialog.InitialDirectory = "c:\\Users\\" + userName;
+                openFileDialog.Filter = "json files (*.json)|*.json";
+                openFileDialog.RestoreDirectory = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = openFileDialog.FileName;
+                    var fileStream = openFileDialog.OpenFile();
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        fileContent = reader.ReadToEnd();
+                    }
+                    var fileSettings = new FileSettings();
+                    fileSettings.FilePath = filePath;
+                    _fileSettingsHandler.Save(fileSettings);
+                    SetConfigurationInTextBoxes();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return true if there is unsaved data
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckUnsavedData()
+        {
+            // when you have uncommited data it shows a warning message
+            if (buttonReset.Enabled == true)
+            {
+                var result = MessageBox.Show("You have unsaved data!\nDo you wish to contiune?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -3,6 +3,8 @@ using System;
 using ProiectPractica.Repository;
 using System.Configuration;
 using ProiectPractica.Validator;
+using ProiectPractica.SettingsHandler;
+using System.Reflection;
 
 namespace ProiectPractica
 {
@@ -16,10 +18,12 @@ namespace ProiectPractica
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
-            var filePath = ConfigurationManager.AppSettings["filePath"];
-            var configurationRepository = new ConfigurationRepository(filePath);
+            var filePath = AppDomain.CurrentDomain.BaseDirectory + "//fileSettings.json";
+            var fileSettingsHandler = new FileSettingsHandler(filePath);
+            var configurationRepository = new ConfigurationRepository();
             ApplicationConfiguration.Initialize();
             var config = new ConfigForm();
+            config.SetFileSettingsHandler(fileSettingsHandler);
             config.SetRepository(configurationRepository);
             Application.Run(config);
         }
