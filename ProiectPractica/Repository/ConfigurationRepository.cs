@@ -1,15 +1,12 @@
 ﻿using ProiectPractica.Model;
 using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
 
 namespace ProiectPractica.Repository
 {
     public class ConfigurationRepository : IConfigurationRepository
     {
-        private readonly string _filePath;
-        public ConfigurationRepository(string filePath) 
-        { 
-            _filePath = filePath;
-        }
+        private string _filePath;
 
         /// <summary>
         /// This function deserializes a JSON string and returns the configuration.
@@ -19,9 +16,9 @@ namespace ProiectPractica.Repository
         /// <returns>The configuration from the file, if it can be deserialized or null otherwise</returns>
         public Configuration? GetConfigurationFromFile()
         {
-            var stringFromFile = ReadFromFile();
             try
             {
+                var stringFromFile = ReadFromFile();
                 var configuration = JsonConvert.DeserializeObject<Configuration>(stringFromFile);
                 return configuration;
             }
@@ -29,6 +26,12 @@ namespace ProiectPractica.Repository
             {
                 return null; 
             }
+        }
+
+        public string FilePath
+        {
+            get { return _filePath; }
+            set { _filePath = value; }
         }
 
         /// <summary>

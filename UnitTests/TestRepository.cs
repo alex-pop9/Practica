@@ -1,5 +1,7 @@
 using ProiectPractica.Repository;
 using ProiectPractica.Model;
+using ProiectPractica.SettingsHandler;
+using ProiectPractica.Validator;
 using System.IO;
 using System.Reflection;
 using Mono.Cecil;
@@ -15,7 +17,8 @@ namespace TestProject1
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
             var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "validConfiguration.json");
-            var repository = new ConfigurationRepository(stubPath);
+            var repository = new ConfigurationRepository();
+            repository.FilePath = stubPath;
 
             var configuration = repository.GetConfigurationFromFile();
 
@@ -28,7 +31,8 @@ namespace TestProject1
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
             var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "invalidConfiguration.json");
-            var repository = new ConfigurationRepository(stubPath);
+            var repository = new ConfigurationRepository();
+            repository.FilePath = stubPath;
 
             var configuration = repository.GetConfigurationFromFile();
 
@@ -36,14 +40,17 @@ namespace TestProject1
         }
 
         [TestMethod]
-        public void GetConfigurationFromFile_InvalidFilePath_ThrowException()
+        public void GetConfigurationFromFile_InvalidFilePath_ReturnNullConfiguration()
         {
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
             var stubPath = Path.Combine(assemblyDirectory, "configuration.json");
-            var repository = new ConfigurationRepository(stubPath);
+            var repository = new ConfigurationRepository();
+            repository.FilePath = stubPath;
 
-            Assert.ThrowsException<FileNotFoundException>(() => repository.GetConfigurationFromFile());
+            var configuration = repository.GetConfigurationFromFile();
+
+            Assert.IsNull(configuration);
         }
 
         [TestMethod]
@@ -52,7 +59,8 @@ namespace TestProject1
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
             var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "saveConfiguration.json");
-            var repository = new ConfigurationRepository(stubPath);
+            var repository = new ConfigurationRepository();
+            repository.FilePath = stubPath;
             var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
@@ -77,7 +85,8 @@ namespace TestProject1
             // Here I gave an actual invalid file path, because using the method from other tests
             // will create the file, failing the test.
             var stubPath = "C:\test3.json";
-            var repository = new ConfigurationRepository(stubPath);
+            var repository = new ConfigurationRepository();
+            repository.FilePath = stubPath;
             var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
@@ -100,7 +109,8 @@ namespace TestProject1
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyPath);
             var stubPath = Path.Combine(assemblyDirectory, "ConfigurationsForTest", "incompleteConfiguration.json");
-            var repository = new ConfigurationRepository(stubPath);
+            var repository = new ConfigurationRepository();
+            repository.FilePath = stubPath;
             var configuration = new Configuration
             {
                 MinAcceptablePrice = 1,
