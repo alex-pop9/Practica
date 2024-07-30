@@ -62,6 +62,10 @@
             errorLabelEndBusinessHour = new Label();
             buttonFileSelect = new Button();
             openConfigurationFileDialog = new OpenFileDialog();
+            buttonPreviousConfiguration = new Button();
+            buttonNextConfiguration = new Button();
+            labelCurrentFileInfo = new Label();
+            labelCurrentFile = new Label();
             ((System.ComponentModel.ISupportInitialize)errorProviderForConfiguration).BeginInit();
             SuspendLayout();
             // 
@@ -220,7 +224,7 @@
             // 
             // buttonSave
             // 
-            buttonSave.Location = new Point(1021, 726);
+            buttonSave.Location = new Point(1020, 735);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(218, 110);
             buttonSave.TabIndex = 18;
@@ -230,7 +234,7 @@
             // 
             // buttonReset
             // 
-            buttonReset.Location = new Point(1414, 726);
+            buttonReset.Location = new Point(1413, 735);
             buttonReset.Name = "buttonReset";
             buttonReset.Size = new Size(218, 110);
             buttonReset.TabIndex = 19;
@@ -328,12 +332,53 @@
             // 
             openConfigurationFileDialog.FileName = "openFileDialog1";
             // 
+            // buttonPreviousConfiguration
+            // 
+            buttonPreviousConfiguration.Location = new Point(85, 820);
+            buttonPreviousConfiguration.Name = "buttonPreviousConfiguration";
+            buttonPreviousConfiguration.Size = new Size(355, 58);
+            buttonPreviousConfiguration.TabIndex = 30;
+            buttonPreviousConfiguration.Text = "Previous Configuration";
+            buttonPreviousConfiguration.UseVisualStyleBackColor = true;
+            buttonPreviousConfiguration.Click += buttonPreviousConfiguration_Click;
+            // 
+            // buttonNextConfiguration
+            // 
+            buttonNextConfiguration.Location = new Point(549, 820);
+            buttonNextConfiguration.Name = "buttonNextConfiguration";
+            buttonNextConfiguration.Size = new Size(355, 58);
+            buttonNextConfiguration.TabIndex = 31;
+            buttonNextConfiguration.Text = "Next Configuration";
+            buttonNextConfiguration.UseVisualStyleBackColor = true;
+            buttonNextConfiguration.Click += buttonNextConfiguration_Click;
+            // 
+            // labelCurrentFileInfo
+            // 
+            labelCurrentFileInfo.AutoSize = true;
+            labelCurrentFileInfo.Location = new Point(356, 114);
+            labelCurrentFileInfo.Name = "labelCurrentFileInfo";
+            labelCurrentFileInfo.Size = new Size(179, 41);
+            labelCurrentFileInfo.TabIndex = 32;
+            labelCurrentFileInfo.Text = "Current file: ";
+            // 
+            // labelCurrentFile
+            // 
+            labelCurrentFile.AutoSize = true;
+            labelCurrentFile.Location = new Point(549, 114);
+            labelCurrentFile.Name = "labelCurrentFile";
+            labelCurrentFile.Size = new Size(0, 41);
+            labelCurrentFile.TabIndex = 33;
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoValidate = AutoValidate.EnableAllowFocusChange;
-            ClientSize = new Size(1942, 880);
+            ClientSize = new Size(1942, 951);
+            Controls.Add(labelCurrentFile);
+            Controls.Add(labelCurrentFileInfo);
+            Controls.Add(buttonNextConfiguration);
+            Controls.Add(buttonPreviousConfiguration);
             Controls.Add(buttonFileSelect);
             Controls.Add(errorLabelEndBusinessHour);
             Controls.Add(errorLabelStartBusinessHour);
@@ -407,5 +452,9 @@
         private Label errorLabelMinAcceptablePrice;
         private Button buttonFileSelect;
         private OpenFileDialog openConfigurationFileDialog;
+        private Button buttonNextConfiguration;
+        private Button buttonPreviousConfiguration;
+        private Label labelCurrentFile;
+        private Label labelCurrentFileInfo;
     }
 }
