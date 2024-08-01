@@ -100,8 +100,8 @@ namespace ProiectPractica.Persistance
         {
             var configurationLog = _dbContext.Paths
                 .Where (p => p.FilePath == filePath)
-                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog)
-                .OrderBy(c => c.ConfigurationLogID))
+                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog))
+                .OrderBy(c => c.ConfigurationLogID)
                 .LastOrDefault();
             var configuration = JsonConvert.DeserializeObject<Configuration>(configurationLog.ConfigurationString);
             id = configurationLog.ConfigurationLogID;
