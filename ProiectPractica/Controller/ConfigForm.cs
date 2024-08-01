@@ -3,6 +3,7 @@ using ProiectPractica.Repository;
 using System.Globalization;
 using ProiectPractica.Validator;
 using ProiectPractica.SettingsHandler;
+using ProiectPractica.Persistance;
 
 namespace ProiectPractica
 {
@@ -10,6 +11,8 @@ namespace ProiectPractica
     {
         private ConfigurationRepository _repository;
         private FileSettingsHandler _fileSettingsHandler;
+        private ConfigurationPersistence _configurationPersistence;
+        private int _currentId;
         public ConfigForm()
         {
             InitializeComponent();
@@ -20,30 +23,53 @@ namespace ProiectPractica
             _fileSettingsHandler = fileSettingsHandler;
         }
 
+        public void SetDbPersistence(ConfigurationPersistence configurationPersistence)
+        {
+            _configurationPersistence = configurationPersistence;
+        }
+
         public void SetRepository(ConfigurationRepository configurationRepository)
         {
             _repository = configurationRepository;
-            SetConfigurationInTextBoxes();
+            SetFileConfigurationInTextBoxes();
+            SetCurrentFileInLabel();
             SetValidation();
         }
-        
+
         /// <summary>
         /// Reads the configuration from the file and puts the configuration values in text boxes
         /// </summary>
-        private void SetConfigurationInTextBoxes()
+        private void SetFileConfigurationInTextBoxes()
         {
             var filePath = _fileSettingsHandler.GetFileSettings().FilePath;
             _repository.FilePath = filePath;
             var configurationFromRepo = _repository.GetConfigurationFromFile();
+            FirstFileSetupConfigurationInDB(filePath, configurationFromRepo);
             if (configurationFromRepo != null)
             {
-                SetValuesInTextBoxes(configurationFromRepo);
+                SetConfigurationValuesInTextBoxes(configurationFromRepo);
             }
             else
             {
                 MessageBox.Show("Error loading the Configuration from the file, please select a file from the explorer!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            MakeButtonsUnavailable();
+            MakeButtonsDisabled();
+        }
+
+        /// <summary>
+        /// If the file is not in the DB, save the configuration in DB
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="configuration"></param>
+        private void FirstFileSetupConfigurationInDB(string filePath, Configuration configuration)
+        {
+            _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(filePath);
+            if (_currentId == 0)
+            {
+                _configurationPersistence.Save(configuration, new FileSettings { FilePath = filePath });
+                _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(filePath);
+            }
+            EnablingNextAndPreviousButtons(filePath);
         }
 
         /// <summary>
@@ -96,11 +122,16 @@ namespace ProiectPractica
             textEndBusinessHour.Validated += EndBusinessHourValidated;
         }
 
+        private void SetCurrentFileInLabel()
+        {
+            labelCurrentFile.Text = _fileSettingsHandler.GetFileSettings().FilePath;
+        }
+
         /// <summary>
         /// Puts the values from configuration object into the text boxes.
         /// </summary>
         /// <param name="configuration"></param>
-        private void SetValuesInTextBoxes(Configuration configuration)
+        private void SetConfigurationValuesInTextBoxes(Configuration configuration)
         {
             textMinAcceptablePrice.Text = configuration.MinAcceptablePrice.ToString();
             textMinPricePerKm.Text = configuration.MinPricePerKm.ToString(CultureInfo.GetCultureInfo("de-DE"));
@@ -113,7 +144,7 @@ namespace ProiectPractica
             textEndBusinessHour.Text = configuration.EndBusinessHour.ToString();
         }
 
-        private void MakeButtonsUnavailable()
+        private void MakeButtonsDisabled()
         {
             buttonReset.Enabled = false;
             buttonSave.Enabled = false;
@@ -165,9 +196,12 @@ namespace ProiectPractica
             var configuration = GetConfigurationFromTextBox();
             if (_repository.SaveConfiguration(configuration) != null)
             {
+                _configurationPersistence.Save(configuration, new FileSettings { FilePath = _repository.FilePath});
+                _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(_repository.FilePath);
                 MessageBox.Show("Changes saved successfully!");
             }
-            MakeButtonsUnavailable();
+            MakeButtonsDisabled();
+            EnablingNextAndPreviousButtons(_repository.FilePath);
         }
 
         /// <summary>
@@ -196,12 +230,14 @@ namespace ProiectPractica
         /// <param name="e"></param>
         private void buttonReset_Click(object sender, EventArgs e)
         {
-            var configuration = _repository.GetConfigurationFromFile();
+            var configuration = _configurationPersistence.GetLastConfigurationFromFile(_repository.FilePath, out int lastId);
+            _currentId = lastId;
             if (configuration != null)
             {
-                SetValuesInTextBoxes(configuration);
+                SetConfigurationValuesInTextBoxes(configuration);
             }
-            MakeButtonsUnavailable();
+            MakeButtonsDisabled();
+            EnablingNextAndPreviousButtons(_repository.FilePath);
         }
 
         private void ValidatingInt(object sender, System.ComponentModel.CancelEventArgs e)
@@ -354,19 +390,21 @@ namespace ProiectPractica
                 openFileDialog.InitialDirectory = "c:\\Users\\" + userName;
                 openFileDialog.Filter = "json files (*.json)|*.json";
                 openFileDialog.RestoreDirectory = true;
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
                 {
-                    filePath = openFileDialog.FileName;
-                    var fileStream = openFileDialog.OpenFile();
-                    using (StreamReader reader = new StreamReader(fileStream))
-                    {
-                        fileContent = reader.ReadToEnd();
-                    }
-                    var fileSettings = new FileSettings();
-                    fileSettings.FilePath = filePath;
-                    _fileSettingsHandler.Save(fileSettings);
-                    SetConfigurationInTextBoxes();
+                    return;
                 }
+                filePath = openFileDialog.FileName;
+                var fileStream = openFileDialog.OpenFile();
+                using (StreamReader reader = new StreamReader(fileStream))
+                {
+                    fileContent = reader.ReadToEnd();
+                }
+                var fileSettings = new FileSettings();
+                fileSettings.FilePath = filePath;
+                _fileSettingsHandler.Save(fileSettings);
+                SetFileConfigurationInTextBoxes();
+                SetCurrentFileInLabel();
             }
         }
 
@@ -386,6 +424,32 @@ namespace ProiectPractica
                 }
             }
             return false;
+        }
+
+        private void EnablingNextAndPreviousButtons(string filePath)
+        {
+            buttonNextConfiguration.Enabled = false;
+            buttonPreviousConfiguration.Enabled = false;
+            if (_configurationPersistence.GetFirstConfigurationIndexByFile(filePath) < _currentId)
+                buttonPreviousConfiguration.Enabled = true;
+            if (_configurationPersistence.GetLastConfigurationIndexByFile(filePath) > _currentId)
+                buttonNextConfiguration.Enabled = true;
+        }
+
+        private void buttonPreviousConfiguration_Click(object sender, EventArgs e)
+        {
+            var configuration = _configurationPersistence.GetPreviousConfiguration(_repository.FilePath, _currentId, out int idPrevious);
+            _currentId = idPrevious;
+            SetConfigurationValuesInTextBoxes(configuration);
+            EnablingNextAndPreviousButtons(_repository.FilePath);
+        }
+
+        private void buttonNextConfiguration_Click(object sender, EventArgs e)
+        {
+            var configuration = _configurationPersistence.GetNextConfiguration(_repository.FilePath, _currentId, out int idNext);
+            _currentId = idNext;
+            SetConfigurationValuesInTextBoxes(configuration);
+            EnablingNextAndPreviousButtons(_repository.FilePath);
         }
     }
 }
