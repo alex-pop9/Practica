@@ -62,11 +62,11 @@ namespace ProiectPractica
         /// <param name="filePath"></param>
         /// <param name="configuration"></param>
         private void FirstFileSetupConfigurationInDB(string filePath, Configuration configuration)
-        {   
+        {
             _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(filePath);
-            if (_currentId == 0) 
-            { 
-                _configurationPersistence.Save(configuration, filePath);
+            if (_currentId == 0)
+            {
+                _configurationPersistence.Save(configuration, new FileSettings { FilePath = filePath });
                 _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(filePath);
             }
             EnablingNextAndPreviousButtons(filePath);
@@ -196,7 +196,7 @@ namespace ProiectPractica
             var configuration = GetConfigurationFromTextBox();
             if (_repository.SaveConfiguration(configuration) != null)
             {
-                _configurationPersistence.Save(configuration, _repository.FilePath);
+                _configurationPersistence.Save(configuration, new FileSettings { FilePath = _repository.FilePath});
                 _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(_repository.FilePath);
                 MessageBox.Show("Changes saved successfully!");
             }

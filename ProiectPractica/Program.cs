@@ -5,6 +5,7 @@ using ProiectPractica.Validator;
 using ProiectPractica.SettingsHandler;
 using System.Reflection;
 using ProiectPractica.Persistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProiectPractica
 {
@@ -21,8 +22,13 @@ namespace ProiectPractica
             var filePath = AppDomain.CurrentDomain.BaseDirectory + "//fileSettings.json";
             var fileSettingsHandler = new FileSettingsHandler(filePath);
             var configurationRepository = new ConfigurationRepository();
-            var dbContext = System.Configuration.ConfigurationManager.AppSettings["connectionString"];
+            //var dbContext = System.Configuration.ConfigurationManager.AppSettings["connectionString"];
+            var dbContext = new ConfigurationContext();
+
             var configurationPersistence = new ConfigurationPersistence(dbContext);
+
+            //configurationPersistence.Save()
+
             ApplicationConfiguration.Initialize();
             var config = new ConfigForm();
             config.SetFileSettingsHandler(fileSettingsHandler);

@@ -1,239 +1,190 @@
 ﻿using ProiectPractica.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProiectPractica.Mapper;
+using Newtonsoft.Json;
+
 
 namespace ProiectPractica.Persistance
 {
     public class ConfigurationPersistence : IConfigurationPersistence
     {
-        private string _dbConnection;
-
-        public ConfigurationPersistence(string dbConnection)
+        private ConfigurationContext _dbContext;
+        public ConfigurationPersistence(ConfigurationContext dbContext)
         {
-            _dbConnection = dbConnection;
+            _dbContext = dbContext;
         }
 
-        public Configuration? GetLastConfigurationFromFile(string filePath,out int id)
+        /// <summary>
+        /// Returns the first id for a configuration from a specific file path
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public int GetFirstConfigurationIndexByFile(string filePath)
         {
-            var resultedConfiguration = new Configuration();
-            id = 0;
-            using (var connection = new SQLiteConnection(_dbConnection))
-            {
-                connection.Open();
-                if (connection.State != System.Data.ConnectionState.Open)
-                {
-                    return resultedConfiguration;
-                }
-                var command = new SQLiteCommand("SELECT * FROM Configuration WHERE filePath = @filePath ORDER BY id DESC LIMIT 1", connection);
-                command.Parameters.AddWithValue("@filePath", filePath);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (!reader.Read())
-                    {
-                        return resultedConfiguration;
-                    }
-                    id = reader.GetInt32(0);
-                    resultedConfiguration.MinAcceptablePrice = reader.GetInt32(1);
-                    resultedConfiguration.MinPricePerKm = reader.GetFloat(2);
-                    resultedConfiguration.NumberOfCars = reader.GetInt32(3);
-                    resultedConfiguration.ReservationCheckInterval = reader.GetInt32(4);
-                    resultedConfiguration.PhoneNumber = reader.GetString(5);
-                    resultedConfiguration.MinPriceForShortTrips = reader.GetInt32(6);
-                    resultedConfiguration.ShortTripDistanceThreshold = reader.GetInt32(7);
-                    resultedConfiguration.StartBusinessHour = reader.GetInt32(8);
-                    resultedConfiguration.EndBusinessHour = reader.GetInt32(9);
-                }
-            }
-            return resultedConfiguration;
+            var configuration = _dbContext.Paths
+                .Where(p => p.FilePath == filePath)
+                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog)
+                .OrderBy(c => c.ConfigurationLogID))
+                .FirstOrDefault();
+            if(configuration == null)
+                return 0;
+            return configuration.ConfigurationLogID;
         }
 
-        public Configuration? Save(Configuration configuration, string filePath)
+        /// <summary>
+        /// Saves a configuration and the path in DB 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="fileSettings"></param>
+        /// <returns></returns>
+        public Configuration? Save(Configuration configuration, FileSettings fileSettings)
         {
-            using(var connection = new SQLiteConnection(_dbConnection))
+            var dbConfiguration = _dbContext.Configuration.FirstOrDefault();
+            if(dbConfiguration == null)
             {
-                connection.Open();
-                if(connection.State != System.Data.ConnectionState.Open)
-                {
-                    return null;
-                }
-                using(var transaction = connection.BeginTransaction())
-                {
-                    var command = new SQLiteCommand("insert into Configuration(minAcceptablePrice,minPricePerKm," +
-                        "numberOfCars,reservationCheckInterval,phoneNumber,minPriceForShortTrips,shortTripDistanceThreshold," +
-                        "startBusinessHour,endBusinessHour,filePath) values (@minAcceptablePrice,@minPricePerKm,@numberOfCars," +
-                        "@reservationCheckInterval,@phoneNumber,@minPriceForShortTrips,@shortTripDistanceThreshold,@startBusinessHour," +
-                        "@endBusinessHour,@filePath)", connection);
-                    command.Parameters.AddWithValue("@minAcceptablePrice", configuration.MinAcceptablePrice);
-                    command.Parameters.AddWithValue("@minPricePerKm", configuration.MinPricePerKm);
-                    command.Parameters.AddWithValue("@numberOfCars", configuration.NumberOfCars);
-                    command.Parameters.AddWithValue("@reservationCheckInterval", configuration.ReservationCheckInterval);
-                    command.Parameters.AddWithValue("@phoneNumber", configuration.PhoneNumber);
-                    command.Parameters.AddWithValue("@minPriceForShortTrips", configuration.MinPriceForShortTrips);
-                    command.Parameters.AddWithValue("@shortTripDistanceThreshold", configuration.ShortTripDistanceThreshold);
-                    command.Parameters.AddWithValue("@startBusinessHour", configuration.StartBusinessHour);
-                    command.Parameters.AddWithValue("@endBusinessHour", configuration.EndBusinessHour);
-                    command.Parameters.AddWithValue("@filePath", filePath);
-                    command.ExecuteNonQuery();
-                    transaction.Commit();
-                }
+                _dbContext.Configuration.Add(Mapper.Mapper.Convert(configuration));
             }
+            else
+            {
+                dbConfiguration.MinAcceptablePrice = configuration.MinAcceptablePrice;
+                dbConfiguration.MinPricePerKm = configuration.MinPricePerKm;
+                dbConfiguration.NumberOfCars = configuration.NumberOfCars;
+                dbConfiguration.ReservationCheckInterval = configuration.ReservationCheckInterval;
+                dbConfiguration.PhoneNumber = configuration.PhoneNumber;
+                dbConfiguration.MinPriceForShortTrips = configuration.MinPriceForShortTrips;
+                dbConfiguration.ShortTripDistanceThreshold = configuration.ShortTripDistanceThreshold;
+                dbConfiguration.StartBusinessHour = configuration.StartBusinessHour;
+                dbConfiguration.EndBusinessHour = configuration.EndBusinessHour;
+                _dbContext.Configuration.Update(dbConfiguration);
+            }
+            _dbContext.SaveChanges();
+            SaveConfigurationLog(configuration);
+            SavePath(fileSettings);
+            var configurationLog = _dbContext.ConfigurationLog.OrderByDescending(u => u.ConfigurationLogID).FirstOrDefault();
+            var path = _dbContext.Paths.OrderByDescending(u => u.FileSettingsID).FirstOrDefault();
+            SavePathConfgurationLog(configurationLog, path);
             return configuration;
         }
 
-        public List<Configuration> FindAll()
-        {
-            var configurations = new List<Configuration>();
-            using (var connection = new SQLiteConnection(_dbConnection))
-            {
-                connection.Open();
-                if(connection.State != System.Data.ConnectionState.Open)
-                {
-                   return configurations;
-                }
-                var command = new SQLiteCommand("select * from Configurtion", connection);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var resultedConfiguration = new Configuration();
-                        resultedConfiguration.MinAcceptablePrice = reader.GetInt32(1);
-                        resultedConfiguration.MinPricePerKm = reader.GetFloat(2);
-                        resultedConfiguration.NumberOfCars = reader.GetInt32(3);
-                        resultedConfiguration.ReservationCheckInterval = reader.GetInt32(4);
-                        resultedConfiguration.PhoneNumber = reader.GetString(5);
-                        resultedConfiguration.MinPriceForShortTrips = reader.GetInt32(6);
-                        resultedConfiguration.ShortTripDistanceThreshold = reader.GetInt32(7);
-                        resultedConfiguration.StartBusinessHour = reader.GetInt32(8);
-                        resultedConfiguration.EndBusinessHour = reader.GetInt32(9);
-                        configurations.Add(resultedConfiguration);
-                    }
-                }
-            }
-            return configurations;
-        }
-
-        public Configuration? GetPreviousConfiguration(string filePath,int currentId, out int previousId)
-        {
-            var resultedConfiguration = new Configuration();
-            using (var connection = new SQLiteConnection(_dbConnection))
-            {
-                connection.Open();
-                if (connection.State != System.Data.ConnectionState.Open)
-                {
-                    previousId = 0;
-                    return resultedConfiguration;
-                }
-                var command = new SQLiteCommand("SELECT * FROM Configuration WHERE filePath = @filePath AND id < @currentId ORDER BY id DESC LIMIT 1", connection);
-                command.Parameters.AddWithValue("@filePath", filePath);
-                command.Parameters.AddWithValue("@currentId", currentId);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (!reader.Read())
-                    {
-                        previousId = 0;
-                        return resultedConfiguration;
-                    }
-                    previousId = reader.GetInt32(0);
-                    resultedConfiguration.MinAcceptablePrice = reader.GetInt32(1);
-                    resultedConfiguration.MinPricePerKm = reader.GetFloat(2);
-                    resultedConfiguration.NumberOfCars = reader.GetInt32(3);
-                    resultedConfiguration.ReservationCheckInterval = reader.GetInt32(4);
-                    resultedConfiguration.PhoneNumber = reader.GetString(5);
-                    resultedConfiguration.MinPriceForShortTrips = reader.GetInt32(6);
-                    resultedConfiguration.ShortTripDistanceThreshold = reader.GetInt32(7);
-                    resultedConfiguration.StartBusinessHour = reader.GetInt32(8);
-                    resultedConfiguration.EndBusinessHour = reader.GetInt32(9);
-                }
-            }
-            return resultedConfiguration;
-        }
-
-        public Configuration? GetNextConfiguration(string filePath, int currentId, out int nextId)
-        {
-            var resultedConfiguration = new Configuration();
-            using (var connection = new SQLiteConnection(_dbConnection))
-            {
-                connection.Open();
-                if (connection.State != System.Data.ConnectionState.Open)
-                {
-                    nextId = 0;
-                    return resultedConfiguration;
-                }
-                var command = new SQLiteCommand("SELECT * FROM Configuration WHERE filePath = @filePath AND id > @currentId ORDER BY id ASC LIMIT 1", connection);
-                command.Parameters.AddWithValue("@filePath", filePath);
-                command.Parameters.AddWithValue("@currentId", currentId);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (!reader.Read())
-                    {
-                        nextId = 0;
-                        return resultedConfiguration;
-                    }
-                    nextId = reader.GetInt32(0);
-                    resultedConfiguration.MinAcceptablePrice = reader.GetInt32(1);
-                    resultedConfiguration.MinPricePerKm = reader.GetFloat(2);
-                    resultedConfiguration.NumberOfCars = reader.GetInt32(3);
-                    resultedConfiguration.ReservationCheckInterval = reader.GetInt32(4);
-                    resultedConfiguration.PhoneNumber = reader.GetString(5);
-                    resultedConfiguration.MinPriceForShortTrips = reader.GetInt32(6);
-                    resultedConfiguration.ShortTripDistanceThreshold = reader.GetInt32(7);
-                    resultedConfiguration.StartBusinessHour = reader.GetInt32(8);
-                    resultedConfiguration.EndBusinessHour = reader.GetInt32(9);
-                }
-            }
-            return resultedConfiguration;
-        }
-
+        /// <summary>
+        /// Returns the last id for a configuration from a specific file path
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public int GetLastConfigurationIndexByFile(string filePath)
         {
-            var id = 0;
-            using (var connection = new SQLiteConnection(_dbConnection))
-            {
-                connection.Open();
-                if (connection.State != System.Data.ConnectionState.Open)
-                {
-                    return 0;
-                }
-                var command = new SQLiteCommand("SELECT id FROM Configuration WHERE filePath = @filePath ORDER BY id DESC LIMIT 1;", connection);
-                command.Parameters.AddWithValue("@filePath", filePath);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (!reader.Read())
-                    {
-                        return 0;
-                    }
-                    id = reader.GetInt32(0);
-                }
-            }
-            return id;
+            var configurationId = _dbContext.Paths
+                .Where(p => p.FilePath == filePath)
+                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog))
+                .OrderBy(c => c.ConfigurationLogID)
+                .LastOrDefault();
+            if (configurationId == null)
+                return 0;
+            return configurationId.ConfigurationLogID;
         }
 
-        public int GetFirstConfigurationIndexByFile(string filePath)
+        /// <summary>
+        /// Returns the last configuration saved having that specific filepath
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Configuration? GetLastConfigurationFromFile(string filePath, out int id)
         {
-            var id = 0;
-            using (var connection = new SQLiteConnection(_dbConnection))
+            var configurationLog = _dbContext.Paths
+                .Where (p => p.FilePath == filePath)
+                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog)
+                .OrderBy(c => c.ConfigurationLogID))
+                .LastOrDefault();
+            var configuration = JsonConvert.DeserializeObject<Configuration>(configurationLog.ConfigurationString);
+            id = configurationLog.ConfigurationLogID;
+            return configuration;
+        }
+
+        /// <summary>
+        /// Retruns the configuration saved after the current selected configuration 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="currentId"></param>
+        /// <param name="nextId"></param>
+        /// <returns></returns>
+        public Configuration? GetNextConfiguration(string filePath, int currentId, out int nextId)
+        {
+            var configurationLog = _dbContext.Paths
+                .Where(p => p.FilePath == filePath)
+                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog))
+                .Where(c => c.ConfigurationLogID > currentId)
+                .OrderBy(c => c.ConfigurationLogID)
+                .FirstOrDefault();
+            var configuration = new Configuration();
+            if (configurationLog != null)
             {
-                connection.Open();
-                if (connection.State != System.Data.ConnectionState.Open)
-                {
-                    return 0;
-                }
-                var command = new SQLiteCommand("SELECT id FROM Configuration WHERE filePath = @filePath ORDER BY id ASC LIMIT 1;", connection);
-                command.Parameters.AddWithValue("@filePath", filePath);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (!reader.Read())
-                    {
-                        return 0;
-                    }
-                    id = reader.GetInt32(0);
-                }
+                configuration = JsonConvert.DeserializeObject<Configuration>(configurationLog.ConfigurationString);
+                nextId = configurationLog.ConfigurationLogID;
+                return configuration;
             }
-            return id;
+            else
+            {
+                nextId = 0;
+                return configuration;
+            }
+        }
+
+        /// <summary>
+        /// Retruns the configuration saved before the current selected configuration 
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="currentId"></param>
+        /// <param name="previousId"></param>
+        /// <returns></returns>
+        public Configuration? GetPreviousConfiguration(string filePath, int currentId, out int previousId)
+        {
+            var configurationLog = _dbContext.Paths
+                .Where(p => p.FilePath == filePath)
+                .SelectMany(m => m.PathConfigurations.Select(c => c.ConfigurationLog))
+                .Where(c => c.ConfigurationLogID < currentId)
+                .OrderByDescending(c => c.ConfigurationLogID)
+                .FirstOrDefault();
+            var configuration = new Configuration();
+            if (configurationLog != null)
+            {
+                configuration = JsonConvert.DeserializeObject<Configuration>(configurationLog.ConfigurationString);
+                previousId = configurationLog.ConfigurationLogID;
+                return configuration;
+            }
+            else
+            {
+                previousId = 0;
+                return configuration;
+            }
+        }
+        
+        private void SaveConfigurationLog(Configuration configuration)
+        {
+            var log = new ProiectPractica.DbModel.ConfigurationLog();
+            log.ConfigurationString = JsonConvert.SerializeObject(configuration, Formatting.Indented);
+            log.TimeStamp = DateTime.Now.ToString();
+            _dbContext.ConfigurationLog.Add(log);
+            _dbContext.SaveChanges();
+        }
+
+        private void SavePath(FileSettings fileSettings)
+        {
+            _dbContext.Paths.Add(Mapper.Mapper.Convert(fileSettings));
+            _dbContext.SaveChanges();
+        }
+
+        private void SavePathConfgurationLog(ProiectPractica.DbModel.ConfigurationLog Configuration, ProiectPractica.DbModel.FileSettings Path)
+        {
+            _dbContext.PathConfigurationLog.Add(new DbModel.PathConfigurationLog { ConfigurationLog = Configuration, FileSettings = Path});
+            _dbContext.SaveChanges();
         }
     }
 }
