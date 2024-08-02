@@ -21,6 +21,7 @@ namespace ProiectPractica.Persistance
         public DbSet<FileSettings> Paths { get; set; }
         public DbSet<ConfigurationLog> ConfigurationLog { get; set; }
         public DbSet<PathConfigurationLog> PathConfigurationLog { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");

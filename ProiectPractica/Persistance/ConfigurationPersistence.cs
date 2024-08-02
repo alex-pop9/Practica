@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProiectPractica.Mapper;
 using Newtonsoft.Json;
+using Microsoft.VisualBasic.FileIO;
 
 
 namespace ProiectPractica.Persistance
@@ -165,7 +166,38 @@ namespace ProiectPractica.Persistance
                 return configuration;
             }
         }
-        
+
+        /// <summary>
+        /// Saves all reservations read from a file
+        /// </summary>
+        /// <param name="path"></param>
+         public void SaveReservationsInDb(string path)
+        {
+            using (TextFieldParser csvParser = new TextFieldParser(path))
+            {
+                csvParser.CommentTokens = new string[] { "#" };
+                csvParser.SetDelimiters(new string[] { "," });
+                csvParser.HasFieldsEnclosedInQuotes = true;
+
+                csvParser.ReadLine();
+
+                while (!csvParser.EndOfData)
+                {
+                    string[] fields = csvParser.ReadFields();
+                    if(!_dbContext.Reservations.Any(p => p.ReservationID == int.Parse(fields[2])))
+                    {
+                        _dbContext.Reservations.Add(new ProiectPractica.DbModel.Reservation { Week = int.Parse(fields[0]), CongirmedTime = fields[1], ReservationID = int.Parse(fields[2]), Price = float.Parse(fields[3]), Currency = fields[4], Distance = float.Parse(fields[5]), PricePerKm = float.Parse(fields[6]) });
+                    }
+                }
+                _dbContext.SaveChanges();
+            }
+        } 
+
+        public List<ProiectPractica.DbModel.Reservation> GetReservations()
+        {
+            return _dbContext.Reservations.ToList();
+        }
+
         private void SaveConfigurationLog(Configuration configuration)
         {
             var log = new ProiectPractica.DbModel.ConfigurationLog();
@@ -186,5 +218,7 @@ namespace ProiectPractica.Persistance
             _dbContext.PathConfigurationLog.Add(new DbModel.PathConfigurationLog { ConfigurationLog = Configuration, FileSettings = Path});
             _dbContext.SaveChanges();
         }
+
+       
     }
 }
