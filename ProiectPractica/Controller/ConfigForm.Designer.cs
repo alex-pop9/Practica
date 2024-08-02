@@ -66,6 +66,18 @@
             buttonNextConfiguration = new Button();
             labelCurrentFileInfo = new Label();
             labelCurrentFile = new Label();
+            buttonSelectFileDateTime = new Button();
+            monthCalendarStart = new MonthCalendar();
+            monthCalendarEnd = new MonthCalendar();
+            folderBrowserDialog = new FolderBrowserDialog();
+            labelStatisticsText = new Label();
+            labelStatistcsDate = new Label();
+            labelPriceAverageText = new Label();
+            labelPriceAverage = new Label();
+            labelDistanceText = new Label();
+            labelDistanceAverage = new Label();
+            labelPricePerKmText = new Label();
+            labelPricePerKmAverage = new Label();
             ((System.ComponentModel.ISupportInitialize)errorProviderForConfiguration).BeginInit();
             SuspendLayout();
             // 
@@ -369,12 +381,118 @@
             labelCurrentFile.Size = new Size(0, 41);
             labelCurrentFile.TabIndex = 33;
             // 
+            // buttonSelectFileDateTime
+            // 
+            buttonSelectFileDateTime.Location = new Point(165, 959);
+            buttonSelectFileDateTime.Name = "buttonSelectFileDateTime";
+            buttonSelectFileDateTime.Size = new Size(265, 58);
+            buttonSelectFileDateTime.TabIndex = 34;
+            buttonSelectFileDateTime.Text = "Select Folder";
+            buttonSelectFileDateTime.UseVisualStyleBackColor = true;
+            buttonSelectFileDateTime.Click += buttonSelectFileDateTime_Click;
+            // 
+            // monthCalendarStart
+            // 
+            monthCalendarStart.Location = new Point(45, 1052);
+            monthCalendarStart.MaxSelectionCount = 1;
+            monthCalendarStart.Name = "monthCalendarStart";
+            monthCalendarStart.TabIndex = 36;
+            monthCalendarStart.DateChanged += StartDateChanged;
+            // 
+            // monthCalendarEnd
+            // 
+            monthCalendarEnd.Location = new Point(45, 1447);
+            monthCalendarEnd.MaxSelectionCount = 1;
+            monthCalendarEnd.Name = "monthCalendarEnd";
+            monthCalendarEnd.TabIndex = 37;
+            monthCalendarEnd.DateSelected += EndDateSelected;
+            // 
+            // labelStatisticsText
+            // 
+            labelStatisticsText.AutoSize = true;
+            labelStatisticsText.Location = new Point(773, 970);
+            labelStatisticsText.Name = "labelStatisticsText";
+            labelStatisticsText.Size = new Size(465, 41);
+            labelStatisticsText.TabIndex = 38;
+            labelStatisticsText.Text = "Showing Statistics In The Interval: ";
+            // 
+            // labelStatistcsDate
+            // 
+            labelStatistcsDate.AutoSize = true;
+            labelStatistcsDate.Location = new Point(1340, 968);
+            labelStatistcsDate.Name = "labelStatistcsDate";
+            labelStatistcsDate.Size = new Size(0, 41);
+            labelStatistcsDate.TabIndex = 39;
+            // 
+            // labelPriceAverageText
+            // 
+            labelPriceAverageText.AutoSize = true;
+            labelPriceAverageText.Location = new Point(773, 1189);
+            labelPriceAverageText.Name = "labelPriceAverageText";
+            labelPriceAverageText.Size = new Size(212, 41);
+            labelPriceAverageText.TabIndex = 40;
+            labelPriceAverageText.Text = "Price Average: ";
+            // 
+            // labelPriceAverage
+            // 
+            labelPriceAverage.AutoSize = true;
+            labelPriceAverage.Location = new Point(1101, 1189);
+            labelPriceAverage.Name = "labelPriceAverage";
+            labelPriceAverage.RightToLeft = RightToLeft.No;
+            labelPriceAverage.Size = new Size(0, 41);
+            labelPriceAverage.TabIndex = 41;
+            // 
+            // labelDistanceText
+            // 
+            labelDistanceText.AutoSize = true;
+            labelDistanceText.Location = new Point(773, 1333);
+            labelDistanceText.Name = "labelDistanceText";
+            labelDistanceText.Size = new Size(261, 41);
+            labelDistanceText.TabIndex = 42;
+            labelDistanceText.Text = "Distance Average: ";
+            // 
+            // labelDistanceAverage
+            // 
+            labelDistanceAverage.AutoSize = true;
+            labelDistanceAverage.Location = new Point(1101, 1333);
+            labelDistanceAverage.Name = "labelDistanceAverage";
+            labelDistanceAverage.Size = new Size(0, 41);
+            labelDistanceAverage.TabIndex = 43;
+            // 
+            // labelPricePerKmText
+            // 
+            labelPricePerKmText.AutoSize = true;
+            labelPricePerKmText.Location = new Point(773, 1477);
+            labelPricePerKmText.Name = "labelPricePerKmText";
+            labelPricePerKmText.Size = new Size(313, 41);
+            labelPricePerKmText.TabIndex = 44;
+            labelPricePerKmText.Text = "Price Per Km Average: ";
+            // 
+            // labelPricePerKmAverage
+            // 
+            labelPricePerKmAverage.AutoSize = true;
+            labelPricePerKmAverage.Location = new Point(1101, 1477);
+            labelPricePerKmAverage.Name = "labelPricePerKmAverage";
+            labelPricePerKmAverage.Size = new Size(0, 41);
+            labelPricePerKmAverage.TabIndex = 45;
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoValidate = AutoValidate.EnableAllowFocusChange;
-            ClientSize = new Size(1942, 951);
+            ClientSize = new Size(1942, 1864);
+            Controls.Add(labelPricePerKmAverage);
+            Controls.Add(labelPricePerKmText);
+            Controls.Add(labelDistanceAverage);
+            Controls.Add(labelDistanceText);
+            Controls.Add(labelPriceAverage);
+            Controls.Add(labelPriceAverageText);
+            Controls.Add(labelStatistcsDate);
+            Controls.Add(labelStatisticsText);
+            Controls.Add(monthCalendarEnd);
+            Controls.Add(monthCalendarStart);
+            Controls.Add(buttonSelectFileDateTime);
             Controls.Add(labelCurrentFile);
             Controls.Add(labelCurrentFileInfo);
             Controls.Add(buttonNextConfiguration);
@@ -456,5 +574,17 @@
         private Button buttonPreviousConfiguration;
         private Label labelCurrentFile;
         private Label labelCurrentFileInfo;
+        private MonthCalendar monthCalendarStart;
+        private Button buttonSelectFileDateTime;
+        private MonthCalendar monthCalendarEnd;
+        private Label labelStatistcsDate;
+        private Label labelStatisticsText;
+        private FolderBrowserDialog folderBrowserDialog;
+        private Label labelPricePerKmAverage;
+        private Label labelPricePerKmText;
+        private Label labelDistanceAverage;
+        private Label labelDistanceText;
+        private Label labelPriceAverage;
+        private Label labelPriceAverageText;
     }
 }

@@ -196,7 +196,7 @@ namespace ProiectPractica
             var configuration = GetConfigurationFromTextBox();
             if (_repository.SaveConfiguration(configuration) != null)
             {
-                _configurationPersistence.Save(configuration, new FileSettings { FilePath = _repository.FilePath});
+                _configurationPersistence.Save(configuration, new FileSettings { FilePath = _repository.FilePath });
                 _currentId = _configurationPersistence.GetLastConfigurationIndexByFile(_repository.FilePath);
                 MessageBox.Show("Changes saved successfully!");
             }
@@ -450,6 +450,60 @@ namespace ProiectPractica
             _currentId = idNext;
             SetConfigurationValuesInTextBoxes(configuration);
             EnablingNextAndPreviousButtons(_repository.FilePath);
+        }
+
+        private void StartDateChanged(object sender, EventArgs e)
+        {
+            monthCalendarEnd.MinDate = monthCalendarStart.SelectionRange.Start;
+            if (monthCalendarEnd.SelectionStart != null)
+            {
+                labelStatistcsDate.Text = monthCalendarStart.SelectionStart.ToShortDateString() + " - " + monthCalendarEnd.SelectionStart.ToShortDateString();
+            }
+        }
+
+        private void EndDateSelected(object sender, EventArgs e)
+        {
+            labelStatistcsDate.Text = monthCalendarStart.SelectionStart.ToShortDateString() + " - " + monthCalendarEnd.SelectionStart.ToShortDateString();
+            SetAverages(monthCalendarStart.SelectionStart, monthCalendarEnd.SelectionStart);
+        }
+
+        private void buttonSelectFileDateTime_Click(object sender, EventArgs e)
+        {
+            using (folderBrowserDialog)
+            {
+                folderBrowserDialog.Description = "Select a folder";
+                folderBrowserDialog.ShowNewFolderButton = true;
+
+                DialogResult result = folderBrowserDialog.ShowDialog();
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    string[] files = Directory.GetFiles(folderBrowserDialog.SelectedPath);
+                    foreach (string file in files)
+                    {
+                        _configurationPersistence.SaveReservationsInDb(file);
+                    }
+                    
+                }
+            }
+        }
+
+        private void SetAverages(DateTime startDate, DateTime endDate)
+        {
+            var list = _configurationPersistence.GetReservations();
+            var filteredReservations = list
+                .Where(reservation => DateTime.Parse(reservation.CongirmedTime) >= startDate && DateTime.Parse(reservation.CongirmedTime) <= endDate)
+                .ToList();
+
+            if (filteredReservations.Any())
+            {
+                var averagePrice = filteredReservations.Average(reservation => reservation.Price);
+                var averagePricePerKm = filteredReservations.Average(reservation => reservation.PricePerKm);
+                var averageDistance = filteredReservations.Average(reservation => reservation.Distance);
+
+                labelPriceAverage.Text = averagePrice.ToString();
+                labelPricePerKmAverage.Text = averagePricePerKm.ToString();
+                labelDistanceAverage.Text = averageDistance.ToString();
+            }
         }
     }
 }
